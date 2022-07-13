@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.App {
+  max-width: 292px;
+}
+.note-list {
+  width: 80%;
+  margin: 0px auto;
+  border: solid #E2E3E4 1px;
+  text-align: left;
+  padding: 13px 10px;
+  border-radius: 10px;
+}
+.note-list h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #424548;
+  padding-left: 3px;
+}
+.group span {
+  background: #F9E799;
+  padding: 1px 9px;
+  margin: 4px 0px;
+  display: inline-block;
+  border-radius: 10px;
+  font-size: 14px;
+}

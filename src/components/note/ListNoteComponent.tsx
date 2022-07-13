@@ -1,0 +1,90 @@
+import { group } from "console"
+import  React, { Children,FC } from "react"
+import { useEffect } from "react"
+import { useState } from "react"
+import { groupData,getData } from '../../helper';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
+// import Warroom from '~/sdk'
+
+ 
+ const DefaultNoteProps = [{
+   _id: "",
+   thread_name: "test props",
+   thread_topic : "",
+   thread_description : "",
+   thread_group : "",
+   agent_id : 0,
+   group_id : 0,
+
+ }]
+ interface ListNoteProps {
+  thread_data: {
+    thread_name: String,
+    thread_topic : String,
+    thread_description : String,
+    thread_group:String,
+    agent_id: Number,
+    group_id: Object,
+    group_info: {
+      group_name: String,
+      agent_id: Number,
+      thread_name:String,
+      group_color: String,
+    }
+   }[]
+
+}
+
+
+// const ListNoteComponent = ({}):React.Fc<ListNoteProps> = ({thread_data})=>{
+//   return (
+//     <div>
+//       {thread_data.map(thread=>{
+//         return (
+//           <div>
+//             {thread.thread_name}
+//           </div>
+//         )
+//       })}
+//     </div>
+//   )
+// }
+
+const List: React.FC<ListNoteProps> = ({ thread_data }) => {
+
+  const renderList = (): JSX.Element[] => {
+      return thread_data.map((item,key) => {
+        console.log(item)
+          return (
+              <div className="note-list" key={key}>
+                  <div className="list-header">
+                      <h2>{item.thread_name}</h2>
+                  </div>
+                  <div className="group">
+                    <span>
+                    {item.group_info.group_name}
+
+
+                    </span>
+
+                  </div>
+                  <div className="note-short-detail">{item.thread_description.substring(0,50)}....</div>
+              </div>
+          )
+      })
+  }
+
+  return (
+      <>
+          {renderList()} 
+      </>
+  )
+}
+
+export default List;
