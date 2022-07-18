@@ -5,8 +5,16 @@ import { groupData,getData } from './helper';
 import FilterComponent from './components/note/FilterComponent';
 import ListFilterComponent from './components/note/ListNoteComponent';
 import ListNoteComponent from './components/note/ListNoteComponent';
-const App = () => {
+import {useSelector, useDispatch} from 'react-redux'
+import { RootStore,Store } from './redux/store';
+import EditNote from 'components/note/EditNoteComponent';
 
+
+
+const App = () => {
+  const note = useSelector((state:RootStore) => state.note.data)
+  const dispatch = useDispatch()
+  console.log(note.status)
  type SelectType = [{
     label:String,
     value:String
@@ -26,6 +34,7 @@ const App = () => {
 }]
 interface ListNoteProps {
   thread_data: {
+    _id:String,
     thread_name: String,
     thread_topic : String,
     thread_description : String,
@@ -48,7 +57,7 @@ interface ListNoteProps {
 
 
  const curGroup = useRef(0)
- 
+ const [page,setPage] = useState('home')
  useEffect(()=>{
   (async () => {
     const dataGroup = await groupData('/api/note-group/120');
@@ -57,31 +66,55 @@ interface ListNoteProps {
 
   setlistGroup(dataGroup);
 
-  console.log("listNoteItem")
-  console.log(listNoteItem)
   })()
-
+console.log(note)
  },[])
    const onSelectChange = async (e:any) => {
      
     const dataNoteGroup = await getData('/api/note-item/'+e);
     setListNoteItem(dataNoteGroup)
     
-    console.log(listGroup)
-    console.log(dataNoteGroup)
   };
-  return (
-    <div className="App">
-        <div className="_note">
 
-        <FilterComponent options={listGroup} onChange={onSelectChange} />
-        {/* <ListFilterComponent thread_data={listGroup} /> */}
-        <ListNoteComponent thread_data={listNoteItem} />
-
-        </div>
+  switch (note.status) {
+    case 'listing':
+      return (
+        <div className="App">
+            <div className="_note">
+           
+            <FilterComponent options={listGroup} onChange={onSelectChange} />
+            {/* <ListFilterComponent thread_data={listGroup} /> */}
+            <ListNoteComponent thread_data={listNoteItem} />
     
-    </div>
-  );
+            </div>
+        
+        </div>
+      );
+
+      case 'edit':
+        return (
+          <div className="App">
+           <EditNote _id={note.id}/>
+          </div>
+        );
+
+
+      default:
+        return (
+          <div className="App">
+              <div className="_note">
+             
+              <FilterComponent options={listGroup} onChange={onSelectChange} />
+              {/* <ListFilterComponent thread_data={listGroup} /> */}
+              <ListNoteComponent thread_data={listNoteItem} />
+      
+              </div>
+          
+          </div>
+        );
+  }
+
+
 
 }
 

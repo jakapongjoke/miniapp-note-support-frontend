@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    
+    "baseUrl": "src",
     "target": "es5",
     "lib": [
       "dom",
@@ -21,13 +21,16 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths":{
-      "~/*": ["*"],
-      "crypto": [
+      "crypto":[
         "./node_modules/crypto-browserify"
       ],
-    }
+    },
+    
+
   },
+  
   "include": [
-    "src"
-  ]
+    "src",
+  ],
+
 }

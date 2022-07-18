@@ -2,7 +2,7 @@ import { group } from "console"
 import  React, { Children,FC } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
-import { groupData,getData } from '../../helper';
+import { groupData,getData } from 'helper';
 
 // import Warroom from '~/sdk'
 

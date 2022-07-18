@@ -2,13 +2,12 @@ import { group } from "console"
 import  React, { Children,FC } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
-import { groupData,getData } from '../../helper';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { groupData,getData } from 'helper';
+import { Routes ,Route } from 'react-router-dom';
+import {useDispatch} from 'react-redux'
+import {NOTE_FAIL, NOTE_LOADING, NOTE_SUCCESS, NoteDispatchTypes} from "redux/actions/noteActionTypes";
+import { editNote } from "redux/actions/noteAction";
+
 
 // import Warroom from '~/sdk'
 
@@ -25,6 +24,7 @@ import {
  }]
  interface ListNoteProps {
   thread_data: {
+    _id:String,
     thread_name: String,
     thread_topic : String,
     thread_description : String,
@@ -57,14 +57,22 @@ import {
 // }
 
 const List: React.FC<ListNoteProps> = ({ thread_data }) => {
+  const dispatch = useDispatch()
 
   const renderList = (): JSX.Element[] => {
       return thread_data.map((item,key) => {
-        console.log(item)
+        // console.log(item)
           return (
               <div className="note-list" key={key}>
                   <div className="list-header">
-                      <h2>{item.thread_name}</h2>
+                      <h2 onClick={()=>{
+                        dispatch(editNote(item._id))
+                      }}>
+                        
+                        {item.thread_name}
+
+
+                      </h2>
                   </div>
                   <div className="group">
                     <span>

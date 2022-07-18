@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import Warroom from 'sdk';
 
 
 
@@ -24,3 +24,10 @@ export async function getData(url: string) {
       });
       return groupData;
     }
+
+
+    export async function getAgentID () {
+    const warrooms = new Warroom();
+    const clientInfo = await warrooms.getClientInformation()
+    return clientInfo;
+  }

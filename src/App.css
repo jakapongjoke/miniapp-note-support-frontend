@@ -6,7 +6,81 @@
   height: 40vmin;
   pointer-events: none;
 }
+.note_view_content .header_area{
+  float: left;
+  display: block;
+  width: 100%;
+}
+.note_view_content .group {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.note_view_content .note_title {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.note_view_content .note_description {
+  width: 100%;
+  float: left;
+}
+.note_view_content .note_view_content .group {
+  float: left;
+  display: block;
+  width: 100%;
+}
+.note_view_content .group{
+  float: left;
+  display: block;
 
+}
+.note_view_content .header_area  .back{
+  float: left;
+  cursor: pointer;
+  }
+  .note_view_content .header_area .save{
+    float: right;
+  }
+  .note_view_content .view_content_area {
+    display: block;
+    float: left;
+    margin-top: 21px;
+    text-align: left;
+    padding: 10px;
+}
+.note_view_content{
+  position: relative;
+  float: left;
+  display: block;
+}
+.note_view_content .group:after {
+  display: block;
+  content: '';
+  background: #8B8F93;
+  height: 1px;
+  margin-top: 10px;
+}
+.note_view_content .file_area #getFile{
+  display: none;
+}
+.note_view_content .file_area {
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0px;
+  z-index: 1111;
+  width: 50px;
+}
+
+.save button {
+  background: #32A3AA;
+  color: white;
+  font-size: 16px;
+  padding: 8px 15px;
+  border: inherit;
+  border-radius: 5px;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -27,6 +101,7 @@
 .App-link {
   color: #61dafb;
 }
+
 
 @keyframes App-logo-spin {
   from {
