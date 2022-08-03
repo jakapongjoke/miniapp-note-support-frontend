@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = {
     rules: [
    
@@ -11,5 +13,9 @@ module.exports = {
             os:false,
             process:require.resolve("process/browser`")
         }
-    }
+    },
+    plugins: {
+      new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+      }),
 }

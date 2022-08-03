@@ -6,12 +6,13 @@ import { getData } from "helper";
 import { AnyAction } from "redux";
 export const LIST_PAGE = 'LIST_ITEM'
 
-export const editNote =  (noteId:String)=>{
+export const editNote =  (noteId:String,description:String)=>{
 
 return {
       type: 'NOTE_EDIT',
      payload:{
-      id:noteId,
+          _id:noteId,
+      description:description,
       status:"edit"
      }
 
@@ -23,12 +24,32 @@ return {
 }
 
 
-export const listNote =  (agentId:Number)=>{
+
+export const filterNote =  (agentId:Number,groupId:String)=>{
+
+     return {
+                 type: 'NOTE_FILTER',
+                payload:{
+                 agent_id:agentId,
+                 group_id:groupId,
+                 status:"listing"
+                }
+           
+           }
+           
+           
+           
+           
+           }
+
+
+export const listNote =  (agentId:Number,groupId:String)=>{
 
 return {
-            type: 'listing',
+            type: 'NOTE_LIST',
            payload:{
-            agentId:120,
+            agent_id:agentId,
+            group_id:groupId,
             status:"listing"
            }
       
@@ -38,4 +59,43 @@ return {
       
       
       }
+
       
+
+export const UpdateImageNoteEditor =  (content:String)=>{
+
+return {
+            type: 'NOTE_UPDATE_IMAGE_EDITOR',
+           payload:{
+               description:content,
+            status:"update_image_in_editor"
+           }
+      
+      }
+      
+      
+      
+      
+      }
+      
+export const viewNote = (noteId:String,description:String)=>{
+     return {
+          type:'NOTE_VIEW',
+          payload:{
+               id:"",
+               note_title:"",
+               description:"",
+
+          }
+     }
+}
+
+export const manageNoteGroup = (agentId:Number)=>{
+     return {
+         type: 'NOTE_GROUP_MANAGE',
+         payload:{
+              agent_id:agentId,
+          status:"note_group_manage"
+         }
+     }
+ }

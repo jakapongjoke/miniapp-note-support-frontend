@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef} from 'react';
+import React, { useMemo, useEffect, useState ,useRef} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { groupData,getData } from './helper';
@@ -8,13 +8,18 @@ import ListNoteComponent from './components/note/ListNoteComponent';
 import {useSelector, useDispatch} from 'react-redux'
 import { RootStore,Store } from './redux/store';
 import EditNote from 'components/note/EditNoteComponent';
+import SelectList from 'components/editor/ListSelectComponent';
+import { bindActionCreators } from 'redux'
+import { listNote } from 'redux/actions/noteAction';
+import { getAgentID } from 'redux/actions/userAction';
 
-
-
+import ListGroup from 'components/note/ListGroupComponent';
 const App = () => {
-  const note = useSelector((state:RootStore) => state.note.data)
+  
   const dispatch = useDispatch()
-  console.log(note.status)
+   let note = useSelector((state:RootStore) => state.note.data)
+   let notestate = useSelector((state:RootStore) => state)
+
  type SelectType = [{
     label:String,
     value:String
@@ -27,10 +32,10 @@ const App = () => {
   group_color: String,
 }]
  const ValNotegroupType = [{
-  group_name: String,
-  agent_id: Number,
-  thread_name:String,
-  group_color: String,
+  group_name: "",
+  agent_id: "",
+  thread_name:"",
+  group_color: "",
 }]
 interface ListNoteProps {
   thread_data: {
@@ -53,28 +58,47 @@ interface ListNoteProps {
 
 }
  const [listGroup,setlistGroup] = useState<any[]>(ValNotegroupType);
+
+ 
  const [listNoteItem,setListNoteItem] = useState<ListNoteProps["thread_data"]>([]);
+ const curGroup = useRef<String>("") 
 
 
- const curGroup = useRef(0)
+ const noteStatus = useRef<String>("listing")
  const [page,setPage] = useState('home')
+
+ const list = bindActionCreators(listNote,dispatch)
+ 
+
+
  useEffect(()=>{
+
+
   (async () => {
+
     const dataGroup = await groupData('/api/note-group/120');
-    const dataNoteGroup = await getData('/api/note-item/all/120');
-    setListNoteItem(dataNoteGroup)
+    if(!notestate.note.data.group_id){
+      const dataNoteGroup = await getData('/api/note-item/all/120');
+
+      setListNoteItem(dataNoteGroup)
+    }else{
+ 
+      const dataNoteGroup = await getData('/api/note-item/'+notestate.note.data.group_id);
+      console.log(dataNoteGroup)
+
+      setListNoteItem(dataNoteGroup)
+
+     
+
+    }
+
 
   setlistGroup(dataGroup);
-
   })()
-console.log(note)
- },[])
-   const onSelectChange = async (e:any) => {
-     
-    const dataNoteGroup = await getData('/api/note-item/'+e);
-    setListNoteItem(dataNoteGroup)
-    
-  };
+  noteStatus.current = note.status;
+console.log(listNoteItem)
+ },[note.group_id])
+
 
   switch (note.status) {
     case 'listing':
@@ -82,10 +106,11 @@ console.log(note)
         <div className="App">
             <div className="_note">
            
-            <FilterComponent options={listGroup} onChange={onSelectChange} />
+            {/* <FilterComponent options={listGroup} onChange={onSelectChange} /> */}
             {/* <ListFilterComponent thread_data={listGroup} /> */}
+            <SelectList data={listGroup} />
+
             <ListNoteComponent thread_data={listNoteItem} />
-    
             </div>
         
         </div>
@@ -94,7 +119,21 @@ console.log(note)
       case 'edit':
         return (
           <div className="App">
-           <EditNote _id={note.id}/>
+           <EditNote _id={note._id}/>
+          </div>
+        );
+
+      case 'update_image_in_editor':
+        return (
+          <div className="App">
+           <EditNote _id={note._id}/>
+          </div>
+        );
+
+      case 'note_group_manage':
+        return (
+          <div className="App">
+            <ListGroup data={listGroup}/>
           </div>
         );
 
@@ -102,11 +141,11 @@ console.log(note)
       default:
         return (
           <div className="App">
-              <div className="_note">
-             
-              <FilterComponent options={listGroup} onChange={onSelectChange} />
+            <div className="_note">
+          
+              <SelectList data={listGroup}  />
               {/* <ListFilterComponent thread_data={listGroup} /> */}
-              <ListNoteComponent thread_data={listNoteItem} />
+              <ListNoteComponent thread_data={listNoteItem}  {...list} />
       
               </div>
           

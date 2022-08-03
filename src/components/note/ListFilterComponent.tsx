@@ -35,27 +35,12 @@ import { groupData,getData } from 'helper';
 
 }
 
-
-// const ListNoteComponent = ({}):React.Fc<ListNoteProps> = ({thread_data})=>{
-//   return (
-//     <div>
-//       {thread_data.map(thread=>{
-//         return (
-//           <div>
-//             {thread.thread_name}
-//           </div>
-//         )
-//       })}
-//     </div>
-//   )
-// }
-
 const List: React.FC<ListNoteProps> = ({ thread_data }) => {
 
   const renderList = (): JSX.Element[] => {
       return thread_data.map((item,key) => {
           return (
-              <li className="List" key={key}>
+              <li className="List" key={key} >
                   <div className="List-header">
                       <h2>{item.thread_name}</h2>
                   </div>

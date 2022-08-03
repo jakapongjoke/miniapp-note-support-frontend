@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background: #F5F5F5;
+  padding: 5px;
 }
 
 .App-logo {
@@ -72,6 +74,18 @@
   z-index: 1111;
   width: 50px;
 }
+.setting {
+  position: absolute;
+  right: 24px;
+  cursor: pointer;
+}
+.group_color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
 
 .save button {
   background: #32A3AA;
@@ -80,6 +94,80 @@
   padding: 8px 15px;
   border: inherit;
   border-radius: 5px;
+}
+ul.group_list {
+  list-style: none;
+  text-align: left;
+  position: relative;
+}
+.note-list {
+  width: 80%;
+  margin: 0px auto;
+  border: solid #E2E3E4 1px;
+  text-align: left;
+  padding: 13px 10px;
+  border-radius: 10px;
+  background: #f3f7fb;
+}
+.group_list_data li {
+  cursor: pointer;
+}
+li.setting_list {
+  border-style: solid;
+  border-width: 2px 0px 0px 0px;
+  border-color: #E2E3E4;
+  cursor: pointer;
+}
+
+li.setting_list span svg {
+  font-size: 15px;
+}
+li.setting_list span {
+  width: 20px;
+  margin-right: 4px;
+  margin-top: 5px;
+  display: inline-block;
+  text-align: center;
+}
+ul.group_list_data {
+  background: white;
+  position: absolute;
+  width: 222px;
+  list-style: none;
+  padding: 8px 0px 8px 15px;
+  border-radius: 15px;
+  top: 33px;
+  left: 21px;
+}
+ul.list_group {
+  padding: 0 10px;
+  text-align: left;
+  list-style: none;
+}
+ul.list_group li:after {
+  display: block;
+  content: '';
+  height: 2px;
+  background: #E2E3E4;
+  margin-top: 6px;
+}
+ul.list_group .group_icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.group_icon_preset{
+  display: inline-block;
+  width: 20px;
+  text-align: center;
+  height: 20px;
+  cursor: pointer;
+}
+ul.list_group li {
+  margin-bottom: 10px;
+}
+strong.icon_group {
+  float: right;
 }
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

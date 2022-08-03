@@ -20,6 +20,12 @@ import { editNote } from "redux/actions/noteAction";
    thread_group : "",
    agent_id : 0,
    group_id : 0,
+   group_info: {
+    group_name: "",
+    agent_id: 120,
+    thread_name:"",
+    group_color: "",
+  }
 
  }]
  interface ListNoteProps {
@@ -66,7 +72,7 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
               <div className="note-list" key={key}>
                   <div className="list-header">
                       <h2 onClick={()=>{
-                        dispatch(editNote(item._id))
+                        dispatch(editNote(item._id,item.thread_description))
                       }}>
                         
                         {item.thread_name}

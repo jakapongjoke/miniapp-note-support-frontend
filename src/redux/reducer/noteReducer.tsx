@@ -1,7 +1,9 @@
 interface pageState {
     data:{
-        id:String,
+        _id:String,
         status:String,
+        group_id:String,
+        description:String
 
     }
 }
@@ -10,26 +12,50 @@ type pageStateType = pageState;
 const initialState = 
          {
             data:{
-            id:"62cdb11281f41f594ba5f66s",
+              _id:"",
             status:"listing",
+            group_id:"",
+            description:"",
          }
         }
 
-type Action = {type:"NOTE_EDIT",payload:{
-    id:String,
-    status:String
+type Action = {type:String,payload:{
+    _id:String,
+    status:String,
+    group_id:String
+    description:String
    }}
+
+
+const NOTE_EDIT:String = 'NOTE_EDIT'
+const NOTE_LIST:String = 'NOTE_LIST'
+
+const NOTE_UPDATE_IMAGE_EDITOR:String = 'NOTE_UPDATE_IMAGE_EDITOR'
+const NOTE_GROUP_MANAGE:String = 'NOTE_GROUP_MANAGE'
 
  const noteReducer = (state:pageStateType = initialState ,action:Action)=>{
     
-    switch (action.type) {
-        case 'NOTE_EDIT': {
+    switch (action.type){
+        case NOTE_EDIT: {
             
             return  {...state,data:action.payload}
-
+        }
+        
+        case NOTE_LIST:{
+          return  {...state,data:action.payload}
+          
+        }
+        case NOTE_UPDATE_IMAGE_EDITOR:{
+          return  {...state,data:action.payload}
+          
+        }
+        case NOTE_GROUP_MANAGE:{
+          return  {...state,data:action.payload}
+          
         }
         default:
           return state;
+          
       }
 }
 export default noteReducer
