@@ -10,8 +10,8 @@ const translator = short().uuid(); // Defaults to flickrBase58
 window.Buffer = window.Buffer || require("buffer").Buffer;
 // export default axios.create({
 //     baseURL:process.env.REACT_APP_API_URL
-// });
-const url = "http://localhost:8070/api/note-group/120"
+// });http://139.59.238.201/api/note-item/all/
+const url = "http://139.59.238.201/api/note-group/120"
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 export async function getData(url: string) {
