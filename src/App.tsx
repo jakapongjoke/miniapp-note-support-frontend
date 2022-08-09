@@ -91,9 +91,8 @@ const app_production = process.env.PRODUCTION
       localStorage.setItem("agent_id",ClientInformation.agent_id)
       
     }else{
-      let ClientInfo = await getAgentId()
-      console.log(ClientInfo)
-      localStorage.setItem("agent_id",ClientInfo.agent_id)
+      const ClientInformation = await getAgentId()
+      localStorage.setItem("agent_id",ClientInformation.agent_id)
       
     }
   
