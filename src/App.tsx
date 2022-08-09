@@ -90,15 +90,15 @@ interface ListNoteProps {
         appId: "117454667",
       });
   
-      const ClientInformation = await warroom.getClientInformation();
-      console.log(ClientInformation)
-      localStorage.setItem("agent_id",ClientInformation.agent_id)
+      const AgentInformation = await warroom.getCurrentAgent();
+      console.log(AgentInformation.agent_id)
+      localStorage.setItem("agent_id",AgentInformation.agent_id)
       
     }else{
-      const ClientInformation = await getAgentId()
+      const AgentInformation = await getAgentId()
       console.log("Hey Dev ENV")
 
-      localStorage.setItem("agent_id",ClientInformation.agent_id)
+      localStorage.setItem("agent_id",AgentInformation.agent_id)
       
     }
   
