@@ -91,7 +91,7 @@ interface ListNoteProps {
       });
   
       const ClientInformation = await warroom.getClientInformation();
-      console.log("Hey"+ ClientInformation.agent_id)
+      console.log(ClientInformation)
       localStorage.setItem("agent_id",ClientInformation.agent_id)
       
     }else{
