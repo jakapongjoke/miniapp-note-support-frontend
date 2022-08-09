@@ -92,6 +92,8 @@ const app_production = process.env.PRODUCTION
       
     }else{
       const ClientInformation = await getAgentId()
+      console.log("Hey Den ENV")
+
       localStorage.setItem("agent_id",ClientInformation.agent_id)
       
     }
