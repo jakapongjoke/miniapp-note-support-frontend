@@ -4,6 +4,7 @@ import ReactS3Client from 'react-aws-s3-typescript';
 import { s3Config } from '_config/uploadFile';
 import { AnyMxRecord } from 'dns';
 import { promises } from 'stream';
+import { AgentInterface } from 'interfaces/AgentInterface';
 const short = require('short-uuid');
 const translator = short().uuid(); // Defaults to flickrBase58
 
@@ -37,14 +38,15 @@ export async function getData(url: string) {
   // }
 
 
-export async function getAgentId(){
-  return new Promise (resolve=>{
-    setTimeout(()=>{
-      resolve({
-        agent_id:20
+export const getAgentId = ()=>{
+  
+  return new Promise<AgentInterface> (resolve=>{
+    resolve({
+        agent_id:"3111"
       })
-    },100)
   })
+
+
 }
 
 
@@ -80,4 +82,12 @@ export const uploadFileToS3 = async (files:any,filename:string) => {
         console.log(exception);
         /* handle the exception */
     }
+}
+
+export function checkAgentId(){
+  if (localStorage.getItem('agent_id') !== null) {
+    return true
+} else {
+  return false;
+}
 }

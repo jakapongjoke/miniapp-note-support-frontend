@@ -2,22 +2,33 @@ import { NextFunction } from "express"
 import { useDispatch } from "react-redux"
 
 interface userState {
+    data:{
         agent_id:Number
-
+    }
     
 }
 const initialState = {
-    agent_id:24
+    data:{
+    agent_id:0
+}
 }
 
 type Action = {type:String,payload:{
     agent_id:Number
-   }}
+   }
+}
+
+
     const userReducer = (state:userState=initialState ,action:Action)=>{
    switch(action.type){
-    case "GET_AGENT_ID":
-    return  [state, action.payload]
-  
+
+    case 'SET_AGENT_ID':{
+        return  {state, data:action.payload}
+
+    }
+
+    default:
+          return state;
       
    }
 

@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState ,useRef} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { groupData,getData } from './helper';
+import { groupData,getData, getAgentId } from './helper';
 import FilterComponent from './components/note/FilterComponent';
 import ListFilterComponent from './components/note/ListNoteComponent';
 import ListNoteComponent from './components/note/ListNoteComponent';
@@ -11,16 +11,23 @@ import EditNote from 'components/note/EditNoteComponent';
 import SelectList from 'components/editor/ListSelectComponent';
 import { bindActionCreators } from 'redux'
 import { listNote } from 'redux/actions/noteAction';
-import { getAgentID } from 'redux/actions/userAction';
-
 import ListGroup from 'components/note/ListGroupComponent';
+import { checkAgentId } from './helper';
+import Warroom from "sdk"
+import { AgentInterface } from 'interfaces/AgentInterface';
+
 const App = () => {
-  
+
   const dispatch = useDispatch()
+ 
+  
    let note = useSelector((state:RootStore) => state.note.data)
+
    let notestate = useSelector((state:RootStore) => state)
 
- type SelectType = [{
+   let user = useSelector((state:RootStore) => state.user.data)
+
+ type SelectType =   [{
     label:String,
     value:String
  }]
@@ -68,15 +75,31 @@ interface ListNoteProps {
  const [page,setPage] = useState('home')
 
  const list = bindActionCreators(listNote,dispatch)
- 
 
 
+const app_production = process.env.PRODUCTION
  useEffect(()=>{
 
-
+  
   (async () => {
+    
+  
+    if(app_production==="true"){
+      const warroom = new Warroom();
+      const ClientInformation = await warroom.getClientInformation();
+      console.log("Hey"+ ClientInformation.agent_id)
+      localStorage.setItem("agent_id",ClientInformation.agent_id)
+      
+    }else{
+      let ClientInfo = await getAgentId()
+      console.log(ClientInfo)
+      localStorage.setItem("agent_id",ClientInfo.agent_id)
+      
+    }
+  
 
     const dataGroup = await groupData('/api/note-group/120');
+
     if(!notestate.note.data.group_id){
       const dataNoteGroup = await getData('/api/note-item/all/120');
 
@@ -96,7 +119,6 @@ interface ListNoteProps {
   setlistGroup(dataGroup);
   })()
   noteStatus.current = note.status;
-console.log(listNoteItem)
  },[note.group_id])
 
 

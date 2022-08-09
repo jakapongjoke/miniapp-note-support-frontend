@@ -15,10 +15,9 @@ const middlewares = [thunk]
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-const Store = createStore(rootReducer)
+// const Store = createStore(rootReducer)
 
 const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(...middlewares)))
-
 
 
 const root = ReactDOM.createRoot(
