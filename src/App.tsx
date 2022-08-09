@@ -78,13 +78,14 @@ interface ListNoteProps {
 
 
 const app_production = process.env.PRODUCTION
+
  useEffect(()=>{
 
   
   (async () => {
     
   
-    if(app_production==="true"){
+    if(app_production=="true"){
       const warroom = new Warroom();
       const ClientInformation = await warroom.getClientInformation();
       console.log("Hey"+ ClientInformation.agent_id)
@@ -92,7 +93,7 @@ const app_production = process.env.PRODUCTION
       
     }else{
       const ClientInformation = await getAgentId()
-      console.log("Hey Den ENV")
+      console.log("Hey Dev ENV")
 
       localStorage.setItem("agent_id",ClientInformation.agent_id)
       
