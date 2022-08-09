@@ -77,15 +77,13 @@ interface ListNoteProps {
  const list = bindActionCreators(listNote,dispatch)
 
 
-const app_production = process.env.PRODUCTION
-
  useEffect(()=>{
 
   
   (async () => {
     
-  
-    if(app_production=="true"){
+  console.log(process.env.REACT_APP_ENV)
+    if(process.env.REACT_APP_ENV=="prod"){
       const warroom = new Warroom();
       const ClientInformation = await warroom.getClientInformation();
       console.log("Hey"+ ClientInformation.agent_id)
