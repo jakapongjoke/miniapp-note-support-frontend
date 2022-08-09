@@ -102,11 +102,11 @@ interface ListNoteProps {
       
     }
   
-
-    const dataGroup = await groupData('/api/note-group/120');
+    const agent_id = localStorage.getItem("agent_id");
+    const dataGroup = await groupData('/api/note-group/'+agent_id);
 
     if(!notestate.note.data.group_id){
-      const dataNoteGroup = await getData('/api/note-item/all/120');
+      const dataNoteGroup = await getData('/api/note-item/all/'+agent_id);
 
       setListNoteItem(dataNoteGroup)
     }else{
