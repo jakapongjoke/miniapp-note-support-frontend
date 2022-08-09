@@ -85,6 +85,11 @@ interface ListNoteProps {
   console.log(process.env.REACT_APP_ENV)
     if(process.env.REACT_APP_ENV=="prod"){
       const warroom = new Warroom();
+      const applicationStatus = await warroom.init({
+        appType: "taskpane",
+        appId: "117454667",
+      });
+  
       const ClientInformation = await warroom.getClientInformation();
       console.log("Hey"+ ClientInformation.agent_id)
       localStorage.setItem("agent_id",ClientInformation.agent_id)
