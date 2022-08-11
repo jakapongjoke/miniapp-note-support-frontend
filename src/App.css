@@ -2,6 +2,7 @@
   text-align: center;
   background: #F5F5F5;
   padding: 5px;
+  float: left;
 }
 
 .App-logo {
@@ -169,6 +170,39 @@ ul.list_group li {
 strong.icon_group {
   float: right;
 }
+.view_area {
+  border: solid 1px #8B8F93;
+  width: 89%;
+  margin: 0px auto;
+  border-radius: 5px;
+  position: relative;
+}
+.view_area .preview {
+  color: #8B8F93;
+  position: absolute;
+  left: 9px;
+  background: #F5F5F5;
+  display: block;
+  top: -10px;
+
+}
+.action_area .button_group button {
+  padding: 7px 15px;
+}
+.action_area .button_group .save {
+  background: #32A3AA;
+  border-radius: 9px;
+  color:white;
+}
+
+.view_note_group .header_area .back {
+    text-align: left;
+    margin-bottom: 15px;
+    padding-left: 13px;
+}
+.view_note_group .header_area .back span {
+  margin-left: 5px;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -190,6 +224,56 @@ strong.icon_group {
   color: #61dafb;
 }
 
+ul.color li {
+  border-radius: 50%;
+  width: 23px;
+  display: inline-block;
+  height: 23px;
+  margin-right: 4px;
+  cursor:pointer;
+}
+.list_color ul {
+  list-style: none;
+  padding: 0 0;
+}
+.group_data .info {
+  text-align: left;
+  padding-left: 17px;
+  padding-top: 17px;
+}
+.group_label {
+  text-align: left;
+  padding-left: 18px;
+  padding-top: 9px;
+  padding-bottom: 10px;
+}
+.group_label span {
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 3px 9px;
+}
+.edit_area input {
+  width: 100%;
+  display: block;
+  padding: 6px 4px;
+  border-radius: 5px;
+  margin-top: 47px;
+  border: solid 1px #9aabbc;
+  background: transparent;
+}
+.edit_area {
+
+  margin: 0px auto;
+}
+.action_area .button_group{
+  float: right;
+}
+.action_area button {
+  float: left;
+  padding: 6px;
+  border: solid 1px #E2E3E4;
+  background: transparent;
+}
 
 @keyframes App-logo-spin {
   from {

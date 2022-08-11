@@ -1,6 +1,8 @@
 import React, { useMemo, useEffect, useState ,useRef} from 'react';
 import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+
 import { groupData,getData, getAgentId } from './helper';
 import FilterComponent from './components/note/FilterComponent';
 import ListFilterComponent from './components/note/ListNoteComponent';
@@ -15,7 +17,7 @@ import ListGroup from 'components/note/ListGroupComponent';
 import { checkAgentId } from './helper';
 import Warroom from "sdk"
 import { AgentInterface } from 'interfaces/AgentInterface';
-
+import EditNoteGroup from 'components/note/EditGroupNoteComponent';
 const App = () => {
 
   const dispatch = useDispatch()
@@ -96,7 +98,7 @@ interface ListNoteProps {
       
     }else{
       const AgentInformation = await getAgentId()
-      console.log("Hey Dev ENV")
+      console.log(AgentInformation)
 
       localStorage.setItem("agent_id",AgentInformation.agent_id)
       
@@ -125,6 +127,23 @@ interface ListNoteProps {
   })()
   noteStatus.current = note.status;
  },[note.group_id])
+console.log(note)
+
+switch(notestate.noteGroup.data.status){
+  case 'note_group_edit_data': {
+    note.status = notestate.noteGroup.data.status
+    break;
+  }
+  case 'back_to_group':{
+    note.status = 'note_group_manage'
+
+    break;
+  }
+  default:{
+    note.status = note.status
+    break;
+  }
+}
 
 
   switch (note.status) {
@@ -161,6 +180,13 @@ interface ListNoteProps {
         return (
           <div className="App">
             <ListGroup data={listGroup}/>
+          </div>
+        );
+
+      case 'note_group_edit_data':
+        return (
+          <div className="App">
+            <EditNoteGroup _id={notestate.noteGroup.data._id} agent_id={notestate.noteGroup.data.agent_id} />
           </div>
         );
 

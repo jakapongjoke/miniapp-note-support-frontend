@@ -4,14 +4,15 @@ import {NoteGroupType} from 'types/NoteGroupType'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getAgentId } from "helper";
 import { faBarsStaggered,faTrash,faCog } from "@fortawesome/free-solid-svg-icons";
+import { EditNoteGroup } from "redux/actions/noteGroupAction";
 
 
 const ListGroupLi: React.FC<NoteGroupType> = ({data})=>{
     const dispatch = useDispatch()
-
     useEffect(()=>{
 
     },[])
+
     const renderList = (): JSX.Element[]=>{
      
         return data.map((item,key)=>{
@@ -22,7 +23,7 @@ const ListGroupLi: React.FC<NoteGroupType> = ({data})=>{
                     <span className="group_name">{item.group_name}</span>
                     <strong className="icon_group"> 
                     <span className="group_icon_preset trash"><FontAwesomeIcon icon={faTrash}/></span>
-                    <span className="group_icon_preset group_setting" ><FontAwesomeIcon icon={faCog}/></span>
+                    <span className="group_icon_preset group_setting" onClick={()=>{ dispatch( EditNoteGroup(item._id,item.agent_id)) } } ><FontAwesomeIcon icon={faCog}/></span>
 
                     </strong>
       

@@ -9,11 +9,6 @@ const short = require('short-uuid');
 const translator = short().uuid(); // Defaults to flickrBase58
 
 window.Buffer = window.Buffer || require("buffer").Buffer;
-// export default axios.create({
-//     baseURL:process.env.REACT_APP_API_URL
-// });http://139.59.238.201/api/note-item/all/
-
-
 
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
