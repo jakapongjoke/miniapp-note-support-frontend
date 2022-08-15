@@ -274,6 +274,37 @@ ul.color li {
   border: solid 1px #E2E3E4;
   background: transparent;
 }
+.modal_content h2 {
+  font-size: 20px;
+}
+.modal_content {
+  font-size: 10px;
+}
+.modal_content h2 {
+  font-size: 12px;
+  text-align: center;
+}
+.action .delete {
+  color: red;
+}
+.modal_content .action {
+  float: right;
+}
+.modal_delete {
+  position: absolute;
+  width: 223px;
+  z-index: 6;
+  background: white;
+  padding: 10px;
+}
+.modal_content h2 {
+  font-size: 12px;
+  text-align: center;
+}
+.action button.btn {
+  font-size: 14px;
+}
+
 
 @keyframes App-logo-spin {
   from {

@@ -4,7 +4,7 @@ import React
 , { useEffect,useRef,useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { backToNoteGroup } from "redux/actions/noteGroupAction";
+import { backAction } from "redux/actions/noteGroupAction";
 import { useDispatch } from "react-redux";
 const EditNoteGroup: React.FC<NoteGroupMainProp> = (props:NoteGroupMainProp)=>{
     const dispatch = useDispatch()
@@ -35,9 +35,9 @@ const groupNameChange = (e:any)=>{
 }
 
 const colorLi = ():JSX.Element[]=>{
-    return color.map((item) =>{
+    return color.map((item,k) =>{
         return (
-            <li className="palette" style={{backgroundColor:`${item}`}} onClick={()=>{
+            <li key={k} className="palette" style={{backgroundColor:`${item}`}} onClick={()=>{
                 setGroupColor(item)
             }}></li>
         )
@@ -48,7 +48,7 @@ return (
   <div className="view_note_group">
     <div className="header_area">
 
-    <div className="back"  onClick={()=>{ dispatch(backToNoteGroup()) }}>
+    <div className="back"  onClick={()=>{ dispatch(backAction("back_to_group","NOTE_GROUP_BACK")) }}>
     <FontAwesomeIcon icon={faArrowLeft} /> 
     <span>
         EDIT GROUP

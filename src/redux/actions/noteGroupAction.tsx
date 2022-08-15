@@ -26,13 +26,30 @@ export const EditNoteGroup = (NoteId:String,agentId:Number)=>{
 }
 const NOTE_GROUP_BACK:String = 'NOTE_GROUP_BACK'
 
-export const backToNoteGroup = ()=>{
+export const backAction = (status_action:String,type_action:String)=>{
     return { 
-        type:NOTE_GROUP_BACK,
+        type:type_action,
         payload:{
             _id:"",
             agent_id:"",
-            status:"back_to_group"
+            status:status_action
+
+        }
+    }
+
+}
+
+
+const NOTE_GROUP_CLEAR:String = 'NOTE_GROUP_CLEAR'
+
+export const clearNoteGroup = ()=>{
+    
+    return { 
+        type:NOTE_GROUP_CLEAR,
+        payload:{
+            _id:"",
+            agent_id:"",
+            status:""
 
         }
     }

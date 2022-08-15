@@ -127,7 +127,6 @@ interface ListNoteProps {
   })()
   noteStatus.current = note.status;
  },[note.group_id])
-console.log(note)
 
 switch(notestate.noteGroup.data.status){
   case 'note_group_edit_data': {
@@ -139,12 +138,17 @@ switch(notestate.noteGroup.data.status){
 
     break;
   }
+  case 'back_to_list':{
+    note.status = 'listing'
+
+    break;
+  }
   default:{
     note.status = note.status
     break;
   }
 }
-
+console.log( note.status)
 
   switch (note.status) {
     case 'listing':
@@ -205,7 +209,6 @@ switch(notestate.noteGroup.data.status){
           </div>
         );
   }
-
 
 
 }

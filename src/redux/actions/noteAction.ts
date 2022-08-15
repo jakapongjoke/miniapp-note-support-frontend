@@ -4,6 +4,8 @@ import { NoteDispatchTypes } from "./noteActionTypes";
 import { NOTE_LOADING } from "./noteActionTypes";
 import { getData } from "helper";
 import { AnyAction } from "redux";
+import { clearNoteGroup } from "./noteGroupAction";
+import { useDispatch } from "react-redux";
 export const LIST_PAGE = 'LIST_ITEM'
 
 export const editNote =  (noteId:String,description:String)=>{
@@ -44,7 +46,7 @@ export const filterNote =  (agentId:Number,groupId:String)=>{
 
 
 export const listNote =  (agentId:Number,groupId:String)=>{
-
+  
 return {
             type: 'NOTE_LIST',
            payload:{
@@ -58,7 +60,7 @@ return {
       
       
       
-      }
+}
 
       
 
