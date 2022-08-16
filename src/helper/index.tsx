@@ -25,10 +25,23 @@ export async function getData(url: string) {
       let groupData = new Array();
       await axios.get(url).then((resp:any) => {
         resp.data.map((data:any,k:number)=> groupData[k] = { _id: data._id , group_name: data.group_name,group_color:data.group_color} )
+        
       });
       return groupData;
     }
 
+
+    export async function groupSelectData(url: string) {
+      axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+        let groupData = new Array();
+        await axios.get(url).then((resp:any) => {
+          resp.data.map((data:any,k:number)=> groupData[k] = { value: data._id , label: data.group_name} )
+          
+        });
+        return groupData;
+      }
+
+      
   //   export async function getAgentID () {
   //   const warrooms = new Warroom();
   //   const clientInfo = await warrooms.getClientInformation()

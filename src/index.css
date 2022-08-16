@@ -12,6 +12,7 @@ code {
     monospace;
 }
 .App {
+  width: 292px;
   max-width: 292px;
 }
 .note-list {

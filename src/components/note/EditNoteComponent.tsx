@@ -1,5 +1,5 @@
 import  React, { useRef } from "react"
-import { getData,groupData,uploadFileToS3 } from "helper";
+import { getData,groupSelectData,uploadFileToS3 } from "helper";
 import { useEffect,useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'  
@@ -12,8 +12,7 @@ import {NoteItemInterface,defaultNoteItem} from 'interfaces/NoteItemInterface'
 import { NoteProps,DefaultNoteProps } from "interfaces/NotePropsInterface";
 import {NoteGroupType,DefaultNoteGroup} from "types/NoteGroupType"
 import axios from "axios";
-import SelectList from "components/editor/ListSelectComponent";
-
+import SelectListGroupComponent from "../note/SelectListGroupComponent"
 const EditNote: React.FC<NoteProps> = (props: NoteProps)=>{
 
 const blurContent = (e:any) =>{
@@ -35,22 +34,24 @@ console.log('')
 
   useEffect(()=>{
     (async () => {
-      const dataGroup = await groupData('/api/note-group/120');
-
+      const dataGroup = await groupSelectData('/api/note-group/3111');
 
     setlistGroup(dataGroup);
   
     })()
   
    },[])
-
   const [NoteItem,setNoteItem] = useState<NoteItemInterface>(defaultNoteItem)
   const positionTxt = useRef(0)
 const dispatch = useDispatch();
 
 const note = useSelector((state:RootStore) => state.note.data)
 
-console.log(note)
+const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  console.log(e.target.value)
+}
+
+
   useEffect(()=>{
     (async () => {
       const dataNote = await getData('/api/note-item/getinfo/'+props._id);
@@ -83,8 +84,7 @@ console.log(note)
   {NoteItem.thread_name}
   </div>
   <div className="group">
-        <FilterComponent options={listGroup} onChange={(e:any) => onChangeSelect(e.target.value)} />
-
+        <SelectListGroupComponent options={listGroup} onChange={changeGroup} />
         </div>
 
 <NoteEditor content={note.description} /> 

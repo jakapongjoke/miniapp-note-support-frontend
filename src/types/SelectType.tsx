@@ -5,6 +5,6 @@ export type SelectOption = {
   
   export type SelectProps = {
     options: SelectOption[];
-    onChange: (value: string) => void;
+    onChange: (value: React.ChangeEvent<HTMLSelectElement>) => void;
 
   };

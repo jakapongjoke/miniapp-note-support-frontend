@@ -8,6 +8,7 @@ import { EditNoteGroup } from "redux/actions/noteGroupAction";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import parse from 'html-react-parser';
 import {backAction} from  "redux/actions/noteGroupAction"
+import {listNote} from  "redux/actions/noteAction"
 import { RootStore } from 'redux/store';
 
 interface deleteModalI {
@@ -105,7 +106,7 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
 }
 const ListGroup: React.FC<NoteGroupType> = ({data})=>{
     const dispatch = useDispatch()
-    const agent_id = localStorage.getItem("agent_id")
+    const agent_id = Number(localStorage.getItem("agent_id"))
 
 
     return (
@@ -115,7 +116,8 @@ const ListGroup: React.FC<NoteGroupType> = ({data})=>{
 <div className="back">
 <FontAwesomeIcon icon={faArrowLeft} onClick={()=>{
  
-    dispatch( backAction("back_to_list","NOTE_GROUP_CLEAR") )
+    dispatch( backAction("","NOTE_GROUP_BACK") )
+    dispatch( listNote(agent_id,"") )
 }} /> 
 <span>
     EDIT GROUP
