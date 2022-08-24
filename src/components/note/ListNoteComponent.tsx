@@ -6,8 +6,10 @@ import { groupData,getData } from 'helper';
 import { Routes ,Route } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import {NOTE_FAIL, NOTE_LOADING, NOTE_SUCCESS, NoteDispatchTypes} from "redux/actions/noteActionTypes";
-import { editNote } from "redux/actions/noteAction";
-
+import { editNote,addNote } from "redux/actions/noteAction";
+import { faPlus } from '@fortawesome/free-solid-svg-icons'  
+import FilterComponent from '../note/FilterComponent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // import Warroom from '~/sdk'
 
@@ -64,6 +66,7 @@ import { editNote } from "redux/actions/noteAction";
 
 const List: React.FC<ListNoteProps> = ({ thread_data }) => {
   const dispatch = useDispatch()
+  const agent_id = Number(localStorage.getItem("agent_id"))
 
   const renderList = (): JSX.Element[] => {
       return thread_data.map((item,key) => {
@@ -89,15 +92,24 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
 
                   </div>
                   <div className="note-short-detail">{item.thread_description.substring(0,50)}....</div>
+              
+       
               </div>
           )
       })
   }
 
   return (
-      <>
+      <div className="note_list_page_wrp">
           {renderList()} 
-      </>
+          <div className="add_note">
+            <span onClick={()=>{ dispatch(addNote(agent_id,null)) }}>
+                                    <FontAwesomeIcon icon={faPlus} />
+
+            </span>
+
+              </div>
+      </div>
   )
 }
 

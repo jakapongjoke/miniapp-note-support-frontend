@@ -10,11 +10,11 @@ const Select: React.FC<NoteGroupType> = ({ data }: NoteGroupType) => {
   const [showList,setShowList] = useState<Boolean>(false)
   const dispatch = useDispatch()
   const renderList = (showList:Boolean): JSX.Element[] => {
-
+    const agent_id = Number(localStorage.getItem('agent_id'))
     return data.map((item,key) => {
       return (
           <li className="list" key={key} onClick={ ()=> { 
-            dispatch( listNote(120,item._id) ) 
+            dispatch( listNote(agent_id,item._id) ) 
             setShowList(false)
           } }>
                   <span className="group_color" style={{backgroundColor:`${item.group_color}`}}></span>

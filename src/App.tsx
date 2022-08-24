@@ -18,6 +18,7 @@ import { checkAgentId } from './helper';
 import Warroom from "sdk"
 import { AgentInterface } from 'interfaces/AgentInterface';
 import EditNoteGroup from 'components/note/EditGroupNoteComponent';
+import AddNote from 'components/note/addNoteComponent';
 const App = () => {
 
   const dispatch = useDispatch()
@@ -40,12 +41,7 @@ const App = () => {
   thread_name:String,
   group_color: String,
 }]
- const ValNotegroupType = [{
-  group_name: "",
-  agent_id: "",
-  thread_name:"",
-  group_color: "",
-}]
+
 interface ListNoteProps {
   thread_data: {
     _id:String,
@@ -66,7 +62,6 @@ interface ListNoteProps {
 
 
 }
- const [listGroup,setlistGroup] = useState<any[]>(ValNotegroupType);
 
  
  const [listNoteItem,setListNoteItem] = useState<ListNoteProps["thread_data"]>([]);
@@ -77,7 +72,15 @@ interface ListNoteProps {
  const [page,setPage] = useState('home')
 
  const list = bindActionCreators(listNote,dispatch)
-
+  const ValNotegroupType = [{
+      group_name: "",
+      agent_id: "",
+      thread_name:"",
+      group_color: "",
+    }]
+     const [listGroup,setlistGroup] = useState<any[]>(ValNotegroupType);
+    
+     const agent_id = Number(localStorage.getItem("agent_id"));
 
  useEffect(()=>{
 
@@ -104,7 +107,6 @@ interface ListNoteProps {
       
     }
   
-    const agent_id = localStorage.getItem("agent_id");
     const dataGroup = await groupData('/api/note-group/'+agent_id);
 
     if(!notestate.note.data.group_id){
@@ -113,7 +115,7 @@ interface ListNoteProps {
       setListNoteItem(dataNoteGroup)
     }else{
  
-      const dataNoteGroup = await getData('/api/note-item/'+notestate.note.data.group_id);
+      const dataNoteGroup = await getData('/api/note-item/'+notestate.note.data.group_id+'/'+agent_id);
       console.log(dataNoteGroup)
 
       setListNoteItem(dataNoteGroup)
@@ -191,6 +193,13 @@ console.log( note.status)
         return (
           <div className="App">
             <EditNoteGroup _id={notestate.noteGroup.data._id} agent_id={notestate.noteGroup.data.agent_id} />
+          </div>
+        );
+      case 'add_note':
+        return (
+          <div className="App">
+            <AddNote  agent_id={agent_id} />
+
           </div>
         );
 

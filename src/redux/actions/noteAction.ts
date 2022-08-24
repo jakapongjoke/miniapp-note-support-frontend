@@ -103,4 +103,23 @@ export const manageNoteGroup = (agentId:Number)=>{
  }
 
 
+
+ export const addNote =  (agentId:Number,groupId:String|null)=>{
+  
+     return {
+                 type: 'NOTE_ADD',
+                payload:{
+                 agent_id:agentId,
+                 group_id:groupId,
+                 status:"add_note"
+                }
+           
+           }
+           
+           
+           
+           
+     }
+     
+
  

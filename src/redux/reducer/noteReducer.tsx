@@ -32,6 +32,7 @@ const NOTE_LIST:String = 'NOTE_LIST'
 
 const NOTE_UPDATE_IMAGE_EDITOR:String = 'NOTE_UPDATE_IMAGE_EDITOR'
 const NOTE_GROUP_MANAGE:String = 'NOTE_GROUP_MANAGE'
+const NOTE_ADD:String = 'NOTE_ADD'
 
  const noteReducer = (state:pageStateType = initialState ,action:Action)=>{
     
@@ -50,6 +51,10 @@ const NOTE_GROUP_MANAGE:String = 'NOTE_GROUP_MANAGE'
           
         }
         case NOTE_GROUP_MANAGE:{
+          return  {...state,data:action.payload}
+          
+        }
+        case NOTE_ADD:{
           return  {...state,data:action.payload}
           
         }

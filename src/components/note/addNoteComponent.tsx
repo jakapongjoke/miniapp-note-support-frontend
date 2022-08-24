@@ -9,7 +9,7 @@ import NoteEditor from "components/editor/NoteEditor";
 import { RootStore,Store } from 'redux/store';
 import {useDispatch,useSelector} from 'react-redux'
 import {NoteItemInterface,defaultNoteItem} from 'interfaces/NoteItemInterface'
-import { NoteProps,DefaultNoteProps } from "interfaces/NotePropsInterface";
+import { AddNoteProps,DefaultNoteProps } from "interfaces/NotePropsInterface";
 import {NoteGroupType,DefaultNoteGroup} from "types/NoteGroupType"
 import axios from "axios";
 import SelectListGroupComponent from "../note/SelectListGroupComponent"
@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import iconAddImage from 'images/add_image_icon.png'
 var moment = require('moment'); // require
 
-const EditNote: React.FC<NoteProps> = (props: NoteProps)=>{
+const AddNote: React.FC<AddNoteProps> = (props: AddNoteProps)=>{
 
 const blurContent = (e:any) =>{
 }
@@ -43,12 +43,12 @@ console.log('')
 
 
   const [listGroup,setlistGroup] = useState<any[]>(DefaultNoteGroup);
-  const [groupId,setGroupId] = useState<String>("");
+  const [groupId,setGroupId] = useState<string>("");
+  const agent_id = Number(localStorage.getItem('agent_id'))
 
 
   useEffect(()=>{
     (async () => {
-      const agent_id = localStorage.getItem('agent_id')
       const dataGroup = await groupSelectData('/api/note-group/'+agent_id);
 
     setlistGroup(dataGroup);
@@ -80,17 +80,19 @@ const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   setGroupId(e.target.value)
 }
 
-const saveNote = async (id:String)=>{
- const edit =  await axios.put("/api/note-item/"+props._id,{
-    title:title,
-    description:noteDescription,
-    group_id:groupId
-  })
-if(edit.data.status=="complete"){
-  console.log(edit.data)
-  setStatus("complete")
+const saveNote = async (agent_id:Number)=>{
 
-  setLastUpdate(edit.data.updated_date)
+ const add =  await axios.post("/api/note-item/",{
+    thread_name:title,
+    thread_description:noteDescription,
+    group_id:groupId,
+    agent_id:agent_id
+  })
+
+  console.log(add)  
+if(add.data.status=="complete"){
+  setStatus("complete")
+  
 }
 
  }
@@ -101,31 +103,9 @@ if(edit.data.status=="complete"){
   mouseClickPosition.current = document.getSelection()?.focusOffset||0
   mouseClickTxtSelection.current = document.getSelection()?.anchorNode?.nodeValue||""
 
-console.log(document.getSelection())
-console.log(mouseClickPosition.current)
-console.log( mouseClickTxtSelection.current)
-console.log(e)
-console.log(e.target)
 
 }
 
-
-  useEffect(()=>{
-    (async () => {
-      const dataNote = await getData('/api/note-item/getinfo/'+props._id);
-      setNoteItem(dataNote)
-  
-      const title = await dataNote.thread_name
-      const description = await dataNote.thread_description
-      const group_id = await dataNote.group_id
-   
-      setTitle(title)
-      setnoteDescription(description)
-      setGroupId(group_id)
- 
-    })()
-  
-   },[])
 
 
    function getTxtByRange (startNum:number= 0,endNum:number=0,str:String){
@@ -188,12 +168,12 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 
         <div className="header_area">
 
-          <div className="back"  onClick={()=>{ dispatch(listNote(120,"62c86e1f25f272bd9b9346d8")) }}>
+          <div className="back"  onClick={()=>{ dispatch(listNote(agent_id,"")) }}>
           <FontAwesomeIcon icon={faArrowLeft} />
           </div>
 
           <div className="save">
-            <button type="button" onClick={()=>{saveNote(props._id)}}>SAVE</button>
+            <button type="button" onClick={()=>{saveNote(agent_id)}}>ADD NOTE</button>
           </div>
 
         </div>
@@ -206,13 +186,13 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 
 
   <div className="group">
-        <SelectListGroupComponent options={listGroup} onChange={changeGroup} currentGroup={groupId.toString()} />
+        <SelectListGroupComponent options={listGroup} onChange={changeGroup} currentGroup={groupId} />
         {
         (()=>{
           if( status =="complete"){
             return(
               <div className="status complete">
-                Update Complete
+                Add Note Complete 
               </div>
             )
           }
@@ -271,4 +251,4 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 }
 
 
-export default EditNote;
+export default AddNote;

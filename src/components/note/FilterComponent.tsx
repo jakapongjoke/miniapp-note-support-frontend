@@ -30,7 +30,7 @@ const FilterComponent: React.FC<SelectProps> = (props: SelectProps)=>{
     
     return (
     <>
-      <Select options={props.options} onChange={props.onChange} />
+      <Select options={props.options} onChange={props.onChange}  />
     </>
     )
 }

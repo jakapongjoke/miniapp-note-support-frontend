@@ -6,66 +6,65 @@ import { v4 as uuidv4 } from 'uuid';
 import { RootStore,Store } from 'redux/store';
 import {useDispatch,useSelector} from 'react-redux'
 import {UpdateImageNoteEditor} from 'redux/actions/noteAction'
+import {contentEditableProps} from 'types/editorType'
+import ContentEditable from "react-contenteditable";
+
 interface NoteEditorProps{
     content:any,
 }
 
-const blurHandler = (e:any)=>{
-    console.log(e)
-}
-
-const mouseUpHandler = (e:any)=>{
-    // console.log(e)
-}
 
 
-
-
-
-
-const onChangeHandler = (e:any)=>{
-    console.log(e)
-}
-
-//  const onClickHandler = async (e:any)=>{
-//         console.log("click")
-//         console.log(document.getSelection())
-//         console.log(document.getSelection()?.focusOffset)
-//     }
-
- const mouseDownHandler = async (e:any)=>{
-        // console.log(document.getSelection())
-        // console.log(document.getSelection()?.focusOffset)
-    }
-
-
-const NoteEditor: React.FC<NoteEditorProps> = (props: NoteEditorProps)=>{
+const NoteEditor: React.FC<contentEditableProps> = (props: contentEditableProps)=>{
     const dispatch = useDispatch();
 
     const note = useSelector((state:RootStore) => state.note.data)
 
+    
 
 
 
     const [selection,SetSelection] = useState<Selection>()
     const [position,SetPosition] = useState<Number>(0)
     const [noteDescription,setNoteDescription] = useState<String>("")
+
     const descriptionValue = useRef("")
-    descriptionValue.current = props.content
+
     const mouseClickPosition = useRef(0)
+    const mouseClickTxtSelection = useRef("")
+
+
+
+
 
     const onClickHandler = async (e:any)=>{
         
         mouseClickPosition.current = document.getSelection()?.focusOffset||0
+        mouseClickTxtSelection.current = document.getSelection()?.focusNode?.textContent||""
+console.log(document.getSelection())
+console.log(mouseClickTxtSelection.current)
 
     }
 
+    
+    
+    
+    
+    
+    
+    const onChangeHandler = (e:any)=>{
+             setNoteDescription(e.target.value)
+
+    }
+    
+
+
     const onKeyDown = async (e:any)=>{
-        descriptionValue.current = e.target.value
+        // setNoteDescription(e.target.value)
     }
 
     const onKeyUp = async (e:any)=>{
-        descriptionValue.current = e.target.value
+        // setNoteDescription(e.target.value)
     }
 
    function getTxtByRange (startNum:number= 0,endNum:number=0,str:String){
@@ -87,13 +86,13 @@ const NoteEditor: React.FC<NoteEditorProps> = (props: NoteEditorProps)=>{
         const filename = await uuidv4();
         const uploadFile = await uploadFileToS3(files,filename);
 
-        let currentText = ""
+        let currentText:String = ""
         let textRangeEnd;
         let newText = ""
         let img = ""
         if(typeof uploadFile !== undefined){
             const location =  await uploadFile?.location;
-            currentText = descriptionValue.current
+            currentText = noteDescription
         
             let textRange =   currentText.substring(0,currentPosition)
             
@@ -110,9 +109,9 @@ const NoteEditor: React.FC<NoteEditorProps> = (props: NoteEditorProps)=>{
              let toEndNum = currentText.length-currentPosition
              let textEnd =  getTxtByRange(currentPosition,currentText.length,currentText);
             newText = textRange+img+textEnd
-
-            dispatch(UpdateImageNoteEditor(newText))
-            
+            console.log(textRange)
+            // dispatch(UpdateImageNoteEditor(newText))
+            setNoteDescription(newText)
         }else{
 
             console.log("undefined")
@@ -122,39 +121,45 @@ const NoteEditor: React.FC<NoteEditorProps> = (props: NoteEditorProps)=>{
       
 
 
-    
-// useEffect(()=>{
-//     (async()=>{
-//         const d = await document.getSelection();
-//         SetSelection(e);
+useEffect(()=>{
+    (async () => {
+        setNoteDescription(props.content);
+        console.log('aa')
+        console.log(noteDescription?.toString())
+     })();
 
-//     }
-//     )()
-// },[])
-   
+},[noteDescription])
+ 
 
 return (
 <>
+<ContentEditable className="note_description" id="description" 
+        html={"<P>sss</P>"} // innerHTML of the editable div
+        disabled={false} // use true to disable edition
+        onChange={props.onChange} // handle innerHTML change
+        
+      />
 
-<div className="note_description" contentEditable="true" 
-onBlur={(e)=>{blurHandler(e)} }  
-onMouseDown={(e)=>{ mouseDownHandler(e)}}  
-onMouseUp={(e)=>{ mouseUpHandler(e) }}  
-onChange={(e)=>{onChangeHandler(e) }}
-onClick={(e)=>{onClickHandler(e)}}
-onKeyDown={(e)=> { onKeyDown(e) } }
-onKeyUp={(e)=> { onKeyUp(e) } }
-suppressContentEditableWarning={true}>
-    
-    {parse(note.description.toString())}
-    </div>
+{/* 
+<div className="note_description" contentEditable="true" id="description"
+suppressContentEditableWarning={true} 
+
+onKeyUp={props.onKeyUp}
+{parse(props.content.toString())}
+
+
+>
+
+    </div> */}
 
     <div className="file_area">
 <label id="getFileLabel" htmlFor="getFile">
   <img src={iconAddImage} />
 
 </label>
-<input type="file" id="getFile" onChange={(e)=>{ 
+<input type="file" id="getFile" 
+
+onChange={(e)=>{ 
     
     updateImgToEditor(e.target.files,mouseClickPosition.current,e.target)
 

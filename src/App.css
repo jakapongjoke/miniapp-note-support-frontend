@@ -23,6 +23,8 @@
   margin-bottom: 10px;
   font-size: 20px;
   font-weight: 500;
+  background: transparent;
+  border: inherit;
 }
 .note_view_content .note_description {
   width: 100%;
@@ -304,8 +306,34 @@ ul.color li {
 .action button.btn {
   font-size: 14px;
 }
-
-
+.status.complete {
+  background: green;
+  color: white;
+  padding: 5px;
+  margin-top: 10px;
+  width: 143px;
+  text-align: center;
+}
+.date_update {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.add_note {
+  text-align: right;
+  padding-right: 21px;
+  padding-top: 10px;
+}
+.add_note span {
+  background: #BA0020;
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  font-size: 23px;
+  text-align: center;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
