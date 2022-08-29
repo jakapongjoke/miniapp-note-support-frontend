@@ -7,6 +7,14 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { clearNoteGroup,backAction,manageNoteGroup } from "redux/actions/noteGroupAction";
 import { useDispatch } from "react-redux";
 import axios from 'axios'
+const generateId = () => {
+    const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    const oid = timestamp + 'xxxxxxxxxxxxxxxx'
+      .replace(/[x]/g, _ => (Math.random() * 16 | 0).toString(16))
+      .toLowerCase();
+  
+    return { "$oid": oid };
+  }
 
 const AddNoteGroup: React.FC<AddNoteGroupMainProp> = (props:AddNoteGroupMainProp)=>{
 
@@ -63,6 +71,7 @@ const [status,setStatus] = useState<String>("")
 const saveNote = async (agentId:Number)=>{
 
     const add =  await axios.post("/api/note-group/",{
+        _id:generateId().$oid,
         group_name:groupName,
         agent_id:agentId,
         group_color:groupColor,
@@ -113,7 +122,7 @@ return (
           if( status =="complete"){
             return(
                 <div className="data_save" >
-                Update Complete <span className="back_to_group" onClick={
+                Add Complete <span className="back_to_group" onClick={
                     ()=>{ 
                         dispatch(backAction("back_to_group","NOTE_GROUP_BACK"))
                         dispatch(manageNoteGroup(props.agent_id))

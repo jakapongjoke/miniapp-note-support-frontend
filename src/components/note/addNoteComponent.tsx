@@ -17,6 +17,10 @@ import { editorKeyUp,editorKeyDown,editorOnChange } from "events/editorEvents";
 import ContentEditable from "react-contenteditable";
 import { v4 as uuidv4 } from 'uuid';
 import iconAddImage from 'images/add_image_icon.png'
+import { clearNoteGroup,backAction,manageNoteGroup } from "redux/actions/noteGroupAction";
+import { timeStamp } from "console";
+var ObjectID = require("bson-objectid");
+
 var moment = require('moment'); // require
 
 const AddNote: React.FC<AddNoteProps> = (props: AddNoteProps)=>{
@@ -35,7 +39,14 @@ return false;
       }
 }
 
+const generateId = () => {
+  const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+  const oid = timestamp + 'xxxxxxxxxxxxxxxx'
+    .replace(/[x]/g, _ => (Math.random() * 16 | 0).toString(16))
+    .toLowerCase();
 
+  return { "$oid": oid };
+}
 
 const onChangeSelect = (e:any)=>{
 console.log('')
@@ -88,14 +99,14 @@ const saveNote = async (agent_id:Number)=>{
     const img = descriptionElem?.getElementsByTagName("img");
     console.log(img)
  const add =  await axios.post("/api/note-item/",{
+    _id:generateId().$oid,
     thread_name:title,
     thread_description:noteDescription,
     group_id:groupId,
     agent_id:agent_id
   })
-
-  console.log(add)  
-if(add.data.status=="complete"){
+console.log(add)
+if(add.data.status=="save_complete"){
   setStatus("complete")
   
 }
@@ -208,12 +219,14 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
         (()=>{
           if( status =="complete"){
             return(
-              <div className="date_update">
-                Last Updated : 
-                {
-               lastUpdate
-                }
-              </div>
+              <div className="data_save" >
+              Add Complete <span className="back_to_group" onClick={
+                  ()=>{ 
+                      dispatch(backAction("",""))
+                      window.location.reload()
+                      
+                      }}>Back To Group list</span>
+            </div>
             )
           }
         }
