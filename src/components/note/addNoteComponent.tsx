@@ -28,8 +28,11 @@ const mouseUpContent = (e:any) =>{
 }
 
 const onKeyUpEV = (e:any) =>{
-  console.log("k up")
-  // setnoteDescription(e.target.value)
+    if (e.key === "Enter") { // key code of the keybord key
+console.log("enter")
+        e.preventDefault();
+return false;
+      }
 }
 
 
@@ -81,7 +84,9 @@ const changeGroup = (e: React.ChangeEvent<HTMLSelectElement>)=>{
 }
 
 const saveNote = async (agent_id:Number)=>{
-
+    const descriptionElem = document.getElementById('description')
+    const img = descriptionElem?.getElementsByTagName("img");
+    console.log(img)
  const add =  await axios.post("/api/note-item/",{
     thread_name:title,
     thread_description:noteDescription,
@@ -213,11 +218,12 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
           }
         }
       )()}
-        <ContentEditable className="note_description" id="description" 
+        <ContentEditable  onKeyUp={onKeyUpEV} className="note_description" id="description" 
         html={noteDescription.toString()} // innerHTML of the editable div
         disabled={false} // use true to disable edition
         onChange={ (e)=>{ editorOnChange(e,
           ()=>{
+            console.log(e)
             setStatus("editing")
 
              setnoteDescription(e.target.value)

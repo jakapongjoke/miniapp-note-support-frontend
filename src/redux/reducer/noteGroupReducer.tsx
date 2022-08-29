@@ -27,6 +27,7 @@ type Action = {type:String,payload:{
 
 const NOTE_GROUP_CLEAR:String = 'NOTE_GROUP_CLEAR'
 
+const NOTE_GROUP_ADD_DATA:String = 'NOTE_GROUP_ADD_DATA'
 const NOTE_GROUP_BACK:String = 'NOTE_GROUP_BACK'
 const NOTE_GROUP_EDIT_DATA:String = 'NOTE_GROUP_EDIT_DATA'
  const noteGroupReducer = (state:noteGroupState = initialState ,action:Action)=>{
@@ -48,6 +49,15 @@ const NOTE_GROUP_EDIT_DATA:String = 'NOTE_GROUP_EDIT_DATA'
         }
 
         case NOTE_GROUP_CLEAR: {
+            
+            return  {
+                ...state,
+                data:action.payload
+            }
+        }
+
+
+        case NOTE_GROUP_ADD_DATA: {
             
             return  {
                 ...state,

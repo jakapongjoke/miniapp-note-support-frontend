@@ -4,7 +4,9 @@
   padding: 5px;
   float: left;
 }
-
+li.palette.focus {
+  border: solid 2px black;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -333,6 +335,16 @@ ul.color li {
   color: white;
   border-radius: 50%;
   cursor: pointer;
+}
+.data_save .back_to_group {
+  color: coral;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.data_save {
+  background: green;
+  color: white;
 }
 @keyframes App-logo-spin {
   from {

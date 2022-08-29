@@ -5,12 +5,15 @@ import { faCog,faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { filterNote,listNote,manageNoteGroup } from "redux/actions/noteAction";
 import { connect } from "react-redux";
+import { v4 as uuidv4 } from 'uuid';
+
 const Select: React.FC<NoteGroupType> = ({ data }: NoteGroupType) => {
 
   const [showList,setShowList] = useState<Boolean>(false)
   const dispatch = useDispatch()
+  const agent_id = Number(localStorage.getItem('agent_id'))
+
   const renderList = (showList:Boolean): JSX.Element[] => {
-    const agent_id = Number(localStorage.getItem('agent_id'))
     return data.map((item,key) => {
       return (
           <li className="list" key={key} onClick={ ()=> { 
@@ -42,7 +45,7 @@ if(showList===true){
 
           }
             
-          <li className="setting_list" onClick={()=>{ dispatch(manageNoteGroup(120)) 
+          <li className="setting_list" onClick={()=>{ dispatch(manageNoteGroup(agent_id)) 
           setShowList(!showList)
           } }><span><FontAwesomeIcon icon={faCog}/></span> Manage Group</li>
           </ul>
@@ -66,7 +69,7 @@ if(showList===true){
 const SelectList: React.FC<NoteGroupType> = (props: NoteGroupType)=>{
   return (
   <>
-    <Select data={props.data} />
+    <Select data={props.data} randString={uuidv4()}/>
 
   </>
   )

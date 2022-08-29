@@ -1,14 +1,7 @@
-import { group } from "console"
-import  React, { Children,FC } from "react"
-import { useEffect } from "react"
-import { useState } from "react"
-import { groupData,getData } from 'helper';
-import { Routes ,Route } from 'react-router-dom';
+import  React from "react"
 import {useDispatch} from 'react-redux'
-import {NOTE_FAIL, NOTE_LOADING, NOTE_SUCCESS, NoteDispatchTypes} from "redux/actions/noteActionTypes";
 import { editNote,addNote } from "redux/actions/noteAction";
 import { faPlus } from '@fortawesome/free-solid-svg-icons'  
-import FilterComponent from '../note/FilterComponent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 // import Warroom from '~/sdk'
@@ -24,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
    group_id : 0,
    group_info: {
     group_name: "",
-    agent_id: 120,
+    agent_id: "",
     thread_name:"",
     group_color: "",
   }

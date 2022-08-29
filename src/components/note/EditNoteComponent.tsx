@@ -60,6 +60,7 @@ console.log('')
 
   const [NoteItem,setNoteItem] = useState<NoteItemInterface>(defaultNoteItem)
   const [title,setTitle] = useState<string>("")
+
   const [lastUpdate,setLastUpdate] = useState<String>("")
 
 
@@ -87,9 +88,7 @@ const saveNote = async (id:String)=>{
     group_id:groupId
   })
 if(edit.data.status=="complete"){
-  console.log(edit.data)
   setStatus("complete")
-
   setLastUpdate(edit.data.updated_date)
 }
 
@@ -207,17 +206,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 
   <div className="group">
         <SelectListGroupComponent options={listGroup} onChange={changeGroup} currentGroup={groupId.toString()} />
-        {
-        (()=>{
-          if( status =="complete"){
-            return(
-              <div className="status complete">
-                Update Complete
-              </div>
-            )
-          }
-        }
-      )()}
+ 
         </div>
         {
         (()=>{

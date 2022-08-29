@@ -10,6 +10,7 @@ export const manageNoteGroup = (agentId:Number)=>{
     }
 }
 const NOTE_GROUP_EDIT_DATA:String = 'NOTE_GROUP_EDIT_DATA'
+const NOTE_GROUP_ADD_DATA:String = 'NOTE_GROUP_ADD_DATA'
 
 export const EditNoteGroup = (NoteId:String,agentId:Number)=>{
     
@@ -19,6 +20,18 @@ export const EditNoteGroup = (NoteId:String,agentId:Number)=>{
             _id:NoteId,
             agent_id:agentId,
             status:"note_group_edit_data"
+
+        }
+    }
+
+}
+export const addGroup = (agentId:Number)=>{
+    
+    return { 
+        type:NOTE_GROUP_ADD_DATA,
+        payload:{
+            agent_id:agentId,
+            status:"note_group_add_data"
 
         }
     }

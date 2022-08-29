@@ -18,7 +18,10 @@ import { checkAgentId } from './helper';
 import Warroom from "sdk"
 import { AgentInterface } from 'interfaces/AgentInterface';
 import EditNoteGroup from 'components/note/EditGroupNoteComponent';
+import AddNoteGroup from 'components/note/AddNoteGroupComponent';
 import AddNote from 'components/note/addNoteComponent';
+import { v4 as uuidv4 } from 'uuid';
+
 const App = () => {
 
   const dispatch = useDispatch()
@@ -67,7 +70,6 @@ interface ListNoteProps {
  const [listNoteItem,setListNoteItem] = useState<ListNoteProps["thread_data"]>([]);
  const curGroup = useRef<String>("") 
 
-
  const noteStatus = useRef<String>("listing")
  const [page,setPage] = useState('home')
 
@@ -79,7 +81,7 @@ interface ListNoteProps {
       group_color: "",
     }]
      const [listGroup,setlistGroup] = useState<any[]>(ValNotegroupType);
-    
+
      const agent_id = Number(localStorage.getItem("agent_id"));
 
  useEffect(()=>{
@@ -87,7 +89,6 @@ interface ListNoteProps {
   
   (async () => {
     
-  console.log(process.env.REACT_APP_ENV)
     if(process.env.REACT_APP_ENV=="prod"){
       const warroom = new Warroom();
       const applicationStatus = await warroom.init({
@@ -107,50 +108,84 @@ interface ListNoteProps {
       
     }
   
-    const dataGroup = await groupData('/api/note-group/'+agent_id);
 
     if(!notestate.note.data.group_id){
-      const dataNoteGroup = await getData('/api/note-item/all/'+agent_id);
 
-      setListNoteItem(dataNoteGroup)
+      const dataNoteItem = await getData('/api/note-item/all/'+agent_id);
+
+      setListNoteItem(dataNoteItem)
     }else{
  
-      const dataNoteGroup = await getData('/api/note-item/'+notestate.note.data.group_id+'/'+agent_id);
-      console.log(dataNoteGroup)
+      const dataNoteItem = await getData('/api/note-item/'+notestate.note.data.group_id+'/'+agent_id);
 
-      setListNoteItem(dataNoteGroup)
-
-     
-
+      setListNoteItem(dataNoteItem)
+   
     }
-
-
-  setlistGroup(dataGroup);
+    const dataGroup = await groupData('/api/note-group/'+agent_id);
+    setlistGroup(dataGroup);
+  
   })()
+  
   noteStatus.current = note.status;
- },[note.group_id])
 
-switch(notestate.noteGroup.data.status){
-  case 'note_group_edit_data': {
-    note.status = notestate.noteGroup.data.status
-    break;
-  }
-  case 'back_to_group':{
-    note.status = 'note_group_manage'
 
-    break;
-  }
-  case 'back_to_list':{
-    note.status = 'listing'
 
-    break;
-  }
-  default:{
-    note.status = note.status
-    break;
-  }
-}
-console.log( note.status)
+
+
+ },[note.group_id]);
+
+
+
+
+ useEffect(()=>{
+  (async () => {
+ 
+
+})()
+console.log('ggg')
+},[]);
+
+
+  switch(notestate.noteGroup.data.status){
+    case 'note_group_edit_data': {
+      note.status = notestate.noteGroup.data.status
+
+      break;
+    }
+    case 'back_to_group':{
+
+      note.status = 'note_group_manage';
+      
+
+ 
+      break;
+      
+      
+    }
+    
+    case 'back_to_list':{
+      
+      note.status = 'listing'
+      history.go(0);
+
+      break;
+    }
+    case 'note_group_add_data':{
+      note.status = 'note_group_add_data'
+  
+      break;
+    }
+    
+  
+    default:{
+      note.status = note.status
+      break;
+    }
+  };
+  
+  
+
+
 
   switch (note.status) {
     case 'listing':
@@ -160,7 +195,8 @@ console.log( note.status)
            
             {/* <FilterComponent options={listGroup} onChange={onSelectChange} /> */}
             {/* <ListFilterComponent thread_data={listGroup} /> */}
-            <SelectList data={listGroup} />
+
+            <SelectList data={listGroup} randString={uuidv4()} />
 
             <ListNoteComponent thread_data={listNoteItem} />
             </div>
@@ -185,7 +221,8 @@ console.log( note.status)
       case 'note_group_manage':
         return (
           <div className="App">
-            <ListGroup data={listGroup}/>
+ 
+            <ListGroup data={listGroup} randString={uuidv4()} />
           </div>
         );
 
@@ -203,13 +240,20 @@ console.log( note.status)
           </div>
         );
 
+        case 'note_group_add_data':
+
+          return (
+            <div className="App">
+                <AddNoteGroup agent_id={agent_id}/>
+            </div>
+          );
 
       default:
         return (
           <div className="App">
             <div className="_note">
           
-              <SelectList data={listGroup}  />
+              <SelectList data={listGroup}  randString={uuidv4()} />
               {/* <ListFilterComponent thread_data={listGroup} /> */}
               <ListNoteComponent thread_data={listNoteItem}  {...list} />
       

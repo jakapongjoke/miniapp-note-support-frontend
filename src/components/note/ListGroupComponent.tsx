@@ -5,11 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getAgentId } from "helper";
 import { faBarsStaggered,faTrash,faCog } from "@fortawesome/free-solid-svg-icons";
 import { EditNoteGroup } from "redux/actions/noteGroupAction";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft,faPlus } from "@fortawesome/free-solid-svg-icons";
 import parse from 'html-react-parser';
-import {backAction} from  "redux/actions/noteGroupAction"
+import {backAction,addGroup} from  "redux/actions/noteGroupAction"
 import {listNote} from  "redux/actions/noteAction"
 import { RootStore } from 'redux/store';
+import axios from "axios"
+import { v4 as uuidv4 } from 'uuid';
+import { groupData } from 'helper';
+
 
 interface deleteModalI {
     nid:Number|null,
@@ -32,11 +36,35 @@ const defaultModalData = {
 
 
 
+
 const ListGroupLi: React.FC<NoteGroupType> = ({data})=>{
+    const [v,setV] =useState<String>("");
+
+    const agent_id = Number(localStorage.getItem("agent_id"))
+
     const dispatch = useDispatch()
+
     const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
-    
-     
+
+    const [deleteStatus,setDeleteStatus] = useState<String>("")
+    const ValNotegroupType = [{
+        group_name: "",
+        agent_id: "",
+        thread_name:"",
+        group_color: "",
+      }]
+
+    const deleteGroup = async (groupId:String,agentId:Number)=>{
+        const deleteData = await axios.delete('/api/note-group/'+groupId,{data:{
+            agent_id:agentId
+
+        }
+           
+        })
+        if(deleteData.data.status == "delete_complete"){
+            setDeleteModal(defaultDeleteModal)
+        }
+    }   
 const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
     return (
         <div className="modal_delete">
@@ -49,7 +77,9 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
                 <button className="btn cancel" onClick={()=>{
                     setDeleteModal(defaultDeleteModal)
                 }}>ยกเลิก</button>
-                <button className="btn delete">ลบ</button>
+                <button className="btn delete" onClick={()=>{
+                    deleteGroup(_id,agent_id)
+                }}>ลบ</button>
             </div>
         </div>
 
@@ -65,12 +95,9 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
         });
       
     }
-    useEffect(()=>{
-        
-    },[])
 
     const renderList = (): JSX.Element[]=>{
-     
+
         return data.map((item,key)=>{
             return (
                 <li key={key}>
@@ -98,13 +125,39 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
     }
 
     return (
-        <>
+        <div className="note_list_page_wrp">
             {renderList()} 
+            <div className="add_note">
+            <span onClick={()=>{ dispatch(addGroup(agent_id)) }}>
+                                    <FontAwesomeIcon icon={faPlus} />
 
-        </>
+            </span>
+
+              </div>
+
+        </div>
     )
 }
+
+
 const ListGroup: React.FC<NoteGroupType> = ({data})=>{
+    const ValNotegroupType = [{
+        group_name: "",
+        agent_id: "",
+        thread_name:"",
+        group_color: "",
+      }]
+    const [gData,setGdata] =  useState<any[]>(ValNotegroupType)
+
+    useEffect(()=>{
+
+  
+        (async () => {
+            const dataGroup = await groupData('/api/note-group/'+agent_id);
+
+    setGdata(dataGroup)
+})()
+},[]);
     const dispatch = useDispatch()
     const agent_id = Number(localStorage.getItem("agent_id"))
 
@@ -128,7 +181,7 @@ const ListGroup: React.FC<NoteGroupType> = ({data})=>{
 </div>
 
 <ul className="list_group" id="list_group">
-            <ListGroupLi data={data}/>
+            <ListGroupLi data={gData} randString={uuidv4()} />
         </ul> 
    
         </>

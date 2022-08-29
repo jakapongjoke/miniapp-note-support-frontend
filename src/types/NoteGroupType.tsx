@@ -7,7 +7,8 @@ export type NoteGroupDataType = {
   }
 
   export type NoteGroupType = {
-    data:NoteGroupDataType[];
+    data:NoteGroupDataType[],
+    randString:String|undefined|null
   }
 
 

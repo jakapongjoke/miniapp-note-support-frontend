@@ -4,10 +4,17 @@ export interface NoteGroupInterface {
     agent_id:Number,
     group_color:String,
 }
+
 export  interface NoteGroupMainProp{
     _id:String,
     agent_id:Number,
 }
+
+export  interface AddNoteGroupMainProp{
+    agent_id:Number,
+}
+
+
 export const DefaultNoteGroup = {
     _id:"",
     group_name:"",

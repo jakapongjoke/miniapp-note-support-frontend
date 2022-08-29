@@ -24,7 +24,7 @@ export async function getData(url: string) {
     axios.defaults.baseURL = process.env.REACT_APP_API_URL;
       let groupData = new Array();
       await axios.get(url).then((resp:any) => {
-        resp.data.map((data:any,k:number)=> groupData[k] = { _id: data._id , group_name: data.group_name,group_color:data.group_color} )
+        resp.data.map((data:any,k:number)=> groupData[k] = { _id: data._id , agent_id: data.agent_id , group_name: data.group_name,group_color:data.group_color} )
         
       });
       return groupData;
