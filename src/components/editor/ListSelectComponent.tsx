@@ -15,6 +15,7 @@ const Select: React.FC<NoteGroupType> = ({ data }: NoteGroupType) => {
 
   const renderList = (showList:Boolean): JSX.Element[] => {
     return data.map((item,key) => {
+      
       return (
           <li className="list" key={key} onClick={ ()=> { 
             dispatch( listNote(agent_id,item._id) ) 
@@ -45,7 +46,8 @@ if(showList===true){
 
           }
             
-          <li className="setting_list" onClick={()=>{ dispatch(manageNoteGroup(agent_id)) 
+          <li className="setting_list" onClick={()=>{ 
+            dispatch(manageNoteGroup(agent_id)) 
           setShowList(!showList)
           } }><span><FontAwesomeIcon icon={faCog}/></span> Manage Group</li>
           </ul>
@@ -67,6 +69,7 @@ if(showList===true){
 
 }
 const SelectList: React.FC<NoteGroupType> = (props: NoteGroupType)=>{
+  console.log(props.data)
   return (
   <>
     <Select data={props.data} randString={uuidv4()}/>

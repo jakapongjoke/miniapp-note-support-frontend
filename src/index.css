@@ -22,20 +22,30 @@ code {
   text-align: left;
   padding: 13px 10px;
   border-radius: 10px;
+  cursor: pointer;
+
 }
 .note-list h2 {
   margin-top: 0;
   margin-bottom: 0;
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 600;
   color: #424548;
   padding-left: 3px;
+  padding-right: 10px;
+  font-family: 'THSarabunNew';
+  font-weight: bolder;
 }
 .group span {
   background: #F9E799;
   padding: 1px 9px;
-  margin: 4px 0px;
+  margin: 10px 0px;
   display: inline-block;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 8px;
+  font-weight: bold;
+}
+.note-short-detail {
+  font-size: 13px;
+  padding-right: 20px;
 }

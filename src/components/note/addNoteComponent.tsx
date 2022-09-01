@@ -33,8 +33,8 @@ const mouseUpContent = (e:any) =>{
 
 const onKeyUpEV = (e:any) =>{
     if (e.key === "Enter") { // key code of the keybord key
-console.log("enter")
-        e.preventDefault();
+console.log(e)
+        e.target.isContentEditable(false);
 return false;
       }
 }
@@ -115,7 +115,7 @@ if(add.data.status=="save_complete"){
  
 
  const onClickHandler = async (e:any)=>{
-        
+
   mouseClickPosition.current = document.getSelection()?.focusOffset||0
   mouseClickTxtSelection.current = document.getSelection()?.anchorNode?.nodeValue||""
 
@@ -138,8 +138,7 @@ if(add.data.status=="save_complete"){
 
 
 const updateImgToEditor = async (files:any,currentPosition:number,targetSelector:any)=>{
-    console.log("updateImgToEditor")
-    console.log(currentPosition)
+
     const filename = await uuidv4();
     const uploadFile = await uploadFileToS3(files,filename);
 
@@ -162,7 +161,8 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
         // currentText.substring(total,currentText.length)
         // // textRangeEnd =   currentText.substring(positionInject,currentText.length)
 
-         img = `<div style="width:200px; display:block;"><img style="width:100%" src="${location}"/></div>`
+         img = "\n"+`<div style="width:200px; display:block;"><img style="width:100%" src="${location}"/></div>`+"\n"
+
          let toEndNum = currentText.length-currentPosition
          let textEnd =  getTxtByRange(currentPosition,currentText.length,currentText);
         newText = textRange+img+textEnd
@@ -231,7 +231,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
           }
         }
       )()}
-        <ContentEditable  onKeyUp={onKeyUpEV} className="note_description" id="description" 
+        <ContentEditable  onKeyUp={(e:any)=>{onKeyUpEV(e)}} className="note_description" id="description" 
         html={noteDescription.toString()} // innerHTML of the editable div
         disabled={false} // use true to disable edition
         onChange={ (e)=>{ editorOnChange(e,

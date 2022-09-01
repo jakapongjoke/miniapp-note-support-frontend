@@ -2,9 +2,9 @@ import React,{useState,useEffect} from "react";
 import { useDispatch,useSelector } from "react-redux";
 import {NoteGroupType} from 'types/NoteGroupType'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { getAgentId } from "helper";
+import { getAgentId,makeId } from "helper";
 import { faBarsStaggered,faTrash,faCog } from "@fortawesome/free-solid-svg-icons";
-import { EditNoteGroup } from "redux/actions/noteGroupAction";
+import { EditNoteGroup, manageNoteGroup } from "redux/actions/noteGroupAction";
 import { faArrowLeft,faPlus } from "@fortawesome/free-solid-svg-icons";
 import parse from 'html-react-parser';
 import {backAction,addGroup} from  "redux/actions/noteGroupAction"
@@ -31,30 +31,50 @@ const defaultModalData = {
     _id:"",
     group_name:"Example group"
 }
+const agent_id = Number(localStorage.getItem("agent_id"))
 
 
 
 
 
-
-const ListGroupLi: React.FC<NoteGroupType> = ({data})=>{
-    const [v,setV] =useState<String>("");
-
-    const agent_id = Number(localStorage.getItem("agent_id"))
-
-    const dispatch = useDispatch()
-
-    const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
-
-    const [deleteStatus,setDeleteStatus] = useState<String>("")
+const ListGroup: React.FC<NoteGroupType> = ({data})=>{
     const ValNotegroupType = [{
         group_name: "",
         agent_id: "",
         thread_name:"",
         group_color: "",
       }]
+    
+    const [gData,setGdata] =  useState<any[]>(ValNotegroupType)
+    const [v,setV] =useState<String>("");
+
+    console.log('befor useEffect')
+
+ useEffect(()=>{
+
+  (async () => {
+    
+    console.log('sss')
+    const dataGroup = await groupData('/api/note-group/'+agent_id);
+
+    setGdata(dataGroup)
+
+})()
+
+},[v]);
+
+
+
+
+
+
+    const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
+
+    const [deleteStatus,setDeleteStatus] = useState<String>("")
+
 
     const deleteGroup = async (groupId:String,agentId:Number)=>{
+
         const deleteData = await axios.delete('/api/note-group/'+groupId,{data:{
             agent_id:agentId
 
@@ -62,7 +82,13 @@ const ListGroupLi: React.FC<NoteGroupType> = ({data})=>{
            
         })
         if(deleteData.data.status == "delete_complete"){
+            console.log('deleteset')
+          const id = await makeId(7);
             setDeleteModal(defaultDeleteModal)
+            dispatch(backAction("back_to_group","NOTE_GROUP_BACK"))
+            dispatch(manageNoteGroup(agent_id))
+            
+            setV(id)
         }
     }   
 const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
@@ -78,7 +104,12 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
                     setDeleteModal(defaultDeleteModal)
                 }}>ยกเลิก</button>
                 <button className="btn delete" onClick={()=>{
-                    deleteGroup(_id,agent_id)
+
+                   deleteGroup(_id,agent_id)
+      
+
+                    
+
                 }}>ลบ</button>
             </div>
         </div>
@@ -96,7 +127,7 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
       
     }
 
-    const renderList = (): JSX.Element[]=>{
+    const renderList = (data:any[]): JSX.Element[]=>{
 
         return data.map((item,key)=>{
             return (
@@ -124,40 +155,9 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
         })
     }
 
-    return (
-        <div className="note_list_page_wrp">
-            {renderList()} 
-            <div className="add_note">
-            <span onClick={()=>{ dispatch(addGroup(agent_id)) }}>
-                                    <FontAwesomeIcon icon={faPlus} />
 
-            </span>
+ 
 
-              </div>
-
-        </div>
-    )
-}
-
-
-const ListGroup: React.FC<NoteGroupType> = ({data})=>{
-    const ValNotegroupType = [{
-        group_name: "",
-        agent_id: "",
-        thread_name:"",
-        group_color: "",
-      }]
-    const [gData,setGdata] =  useState<any[]>(ValNotegroupType)
-
-    useEffect(()=>{
-
-  
-        (async () => {
-            const dataGroup = await groupData('/api/note-group/'+agent_id);
-
-    setGdata(dataGroup)
-})()
-},[]);
     const dispatch = useDispatch()
     const agent_id = Number(localStorage.getItem("agent_id"))
 
@@ -169,6 +169,7 @@ const ListGroup: React.FC<NoteGroupType> = ({data})=>{
 <div className="back">
 <FontAwesomeIcon icon={faArrowLeft} onClick={()=>{
  
+
     dispatch( backAction("","NOTE_GROUP_BACK") )
     dispatch( listNote(agent_id,"") )
 }} /> 
@@ -181,7 +182,24 @@ const ListGroup: React.FC<NoteGroupType> = ({data})=>{
 </div>
 
 <ul className="list_group" id="list_group">
-            <ListGroupLi data={gData} randString={uuidv4()} />
+<div className="note_list_page_wrp">
+{renderList(gData)}
+<div className="add_note">
+            <span onClick={()=>{ dispatch(addGroup(agent_id)) }}>
+                                    <FontAwesomeIcon icon={faPlus} />
+
+            </span>
+
+              </div>
+
+</div>
+
+
+
+
+
+
+            
         </ul> 
    
         </>

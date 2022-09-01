@@ -132,18 +132,12 @@ interface ListNoteProps {
 
 
 
- },[note.group_id]);
+ },[note]);
 
 
 
 
- useEffect(()=>{
-  (async () => {
- 
 
-})()
-console.log('ggg')
-},[]);
 
 
   switch(notestate.noteGroup.data.status){

@@ -12,7 +12,6 @@ export const editorKeyUp = (e:any,cb:any ) =>{
   }
   
   export  const editorOnChange = (e:any,cb:any) =>{
-     console.log("editorOnChange")
 
      if(typeof cb !== undefined){
       return cb()
