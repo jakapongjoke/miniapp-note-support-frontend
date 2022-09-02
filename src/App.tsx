@@ -190,7 +190,7 @@ interface ListNoteProps {
             {/* <FilterComponent options={listGroup} onChange={onSelectChange} /> */}
             {/* <ListFilterComponent thread_data={listGroup} /> */}
 
-            <SelectList data={listGroup} randString={uuidv4()} />
+            <SelectList data={listGroup} randString={uuidv4()} currentGroup={note.group_id}/>
 
             <ListNoteComponent thread_data={listNoteItem} />
             </div>
@@ -216,7 +216,7 @@ interface ListNoteProps {
         return (
           <div className="App">
  
-            <ListGroup data={listGroup} randString={uuidv4()} />
+            <ListGroup data={listGroup} currentGroup={note.group_id} randString={uuidv4()} />
           </div>
         );
 
@@ -247,7 +247,7 @@ interface ListNoteProps {
           <div className="App">
             <div className="_note">
           
-              <SelectList data={listGroup}  randString={uuidv4()} />
+              <SelectList data={listGroup}  currentGroup={note.group_id} randString={uuidv4()} />
               {/* <ListFilterComponent thread_data={listGroup} /> */}
               <ListNoteComponent thread_data={listNoteItem}  {...list} />
       

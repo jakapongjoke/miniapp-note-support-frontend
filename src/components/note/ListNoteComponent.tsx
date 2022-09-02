@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux'
 import { editNote,addNote } from "redux/actions/noteAction";
 import { faPlus,faTimes } from '@fortawesome/free-solid-svg-icons'  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { stripHtml } from "string-strip-html";
 
 // import Warroom from '~/sdk'
 
@@ -60,8 +61,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const List: React.FC<ListNoteProps> = ({ thread_data }) => {
   const dispatch = useDispatch()
   const agent_id = Number(localStorage.getItem("agent_id"))
+  
   const removeNote = (e:any)=>{
-    console.log(e)
+    
   }
   const renderList = (): JSX.Element[] => {
       return thread_data.map((item,key) => {
@@ -89,7 +91,7 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
                     </span>
 
                   </div>
-                  <div className="note-short-detail">{item.thread_description.substring(0,50)}....</div>
+                  <div className="note-short-detail">{stripHtml(item.thread_description.substring(0,50)).result}....</div>
               
        
               </div>

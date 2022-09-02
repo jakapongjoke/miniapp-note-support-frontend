@@ -9,6 +9,7 @@ export type NoteGroupDataType = {
   export type NoteGroupType = {
     data:NoteGroupDataType[],
     randString:String|undefined|null
+    currentGroup:String|undefined|null
   }
 
 
