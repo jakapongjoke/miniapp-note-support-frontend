@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getAgentId,makeId } from "helper";
 import { faBarsStaggered,faTrash,faCog } from "@fortawesome/free-solid-svg-icons";
 import { EditNoteGroup, manageNoteGroup } from "redux/actions/noteGroupAction";
-import { faArrowLeft,faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft,faPlus,faBars } from "@fortawesome/free-solid-svg-icons";
 import parse from 'html-react-parser';
 import {backAction,addGroup} from  "redux/actions/noteGroupAction"
 import {listNote} from  "redux/actions/noteAction"
@@ -13,7 +13,8 @@ import { RootStore } from 'redux/store';
 import axios from "axios"
 import { v4 as uuidv4 } from 'uuid';
 import { groupData } from 'helper';
-
+import hamburger from 'images/hamburger.png'
+import plus from 'images/plus_icon.png'
 
 interface deleteModalI {
     nid:Number|null,
@@ -23,6 +24,7 @@ const defaultDeleteModal = {
     nid:0,
     show:false,
 }
+
 interface modalInterface {
     id:String,
     group_name:String
@@ -31,6 +33,7 @@ const defaultModalData = {
     _id:"",
     group_name:"Example group"
 }
+
 const agent_id = Number(localStorage.getItem("agent_id"))
 
 
@@ -53,7 +56,7 @@ const ListGroup: React.FC<NoteGroupType> = ({data})=>{
  useEffect(()=>{
 
   (async () => {
-    
+
     console.log('sss')
     const dataGroup = await groupData('/api/note-group/'+agent_id);
 
@@ -132,7 +135,9 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
         return data.map((item,key)=>{
             return (
                 <li key={key}>
-                    <span className="group_icon"><FontAwesomeIcon icon={faBarsStaggered}/></span>
+                    <span className="group_icon">
+                        <img src={hamburger} />
+                    </span>
                     <span className="group_color" style={{backgroundColor:`${item.group_color}`}}></span>
                     <span className="group_name">{item.group_name}</span>
                     
@@ -164,7 +169,7 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
 
     return (
         <>
-            <div className="header_area">
+            <div className="header_area list_group">
 
 <div className="back">
 <FontAwesomeIcon icon={faArrowLeft} onClick={()=>{
@@ -173,7 +178,7 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
     dispatch( backAction("","NOTE_GROUP_BACK") )
     dispatch( listNote(agent_id,"") )
 }} /> 
-<span>
+<span className="header_label">
     EDIT GROUP
 </span>
 
@@ -186,7 +191,7 @@ const modalDeleteGroup = (_id:String,groupName:String): JSX.Element=>{
 {renderList(gData)}
 <div className="add_note">
             <span onClick={()=>{ dispatch(addGroup(agent_id)) }}>
-                                    <FontAwesomeIcon icon={faPlus} />
+                                   <img src={plus}/>
 
             </span>
 

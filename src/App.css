@@ -37,6 +37,8 @@ li.palette.focus {
 .note_view_content .note_description {
   width: 100%;
   float: left;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 .note_view_content .note_view_content .group {
   float: left;
@@ -87,10 +89,12 @@ li.palette.focus {
 }
 .setting {
   position: absolute;
-  right: 24px;
+  right: 7px;
+  top: 5px;
   cursor: pointer;
 }
 .group_color {
+  margin-left: 4px;
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -101,16 +105,17 @@ li.palette.focus {
 .save button {
   background: #32A3AA;
   color: white;
-  font-size: 16px;
-  padding: 8px 15px;
+  font-size: 10px;
+  padding: 6px 10px;
   border: inherit;
   border-radius: 5px;
 }
-ul.group_list {
-  list-style: none;
-  text-align: left;
-  position: relative;
+.note_view_content .group select {
+  border: solid 1px #E2E3E4;
+  border-radius: 11px;
+  font-size: 13px;
 }
+
 .note-list {
   width: 80%;
   height: 103px;
@@ -128,11 +133,14 @@ ul.group_list {
 }
 ul.group_list {
   font-size: 14px;
-  width: 79%;
+  width: 105px;
+  height: 32px;
   border: solid 1px #E2E3E4;
   border-radius: 10px;
   position: relative;
   margin-left: 32px;
+  list-style: none;
+  text-align: left;
 }
 li.setting_list {
   border-style: solid;
@@ -178,6 +186,9 @@ ul.list_group .group_icon {
   display: inline-block;
   width: 20px;
   height: 20px;
+  vertical-align: super;
+  position: relative;
+  top: 0px;
 }
 .group_icon_preset{
   display: inline-block;
@@ -191,6 +202,7 @@ ul.list_group li {
 }
 strong.icon_group {
   float: right;
+  padding-top: 3px;
 }
 .view_area {
   border: solid 1px #8B8F93;
@@ -342,7 +354,7 @@ ul.color li {
 }
 .add_note {
   text-align: right;
-  padding-right: 21px;
+  padding-right: 0px;
   padding-top: 10px;
 }
 .add_note span {
@@ -383,7 +395,47 @@ ul.color li {
   display: block;
 }
 
+ul#list_group li .group_name {
+    font-size: 13px;
+    position: relative;
+    top: -4px;
+    font-weight: bold;
+}
+.header_area.list_group {
+  text-align: left;
+  padding-left: 10px;
+  margin-bottom: 13px;
+  margin-top: 8px;
+}
+.header_area.list_group .back svg {
+  font-size: 15px;
+}
+.header_area.list_group .header_label {
+  margin-left: 13px;
+  font-size: 12px;
+  position: relative;
+  top: 0px;
+  font-weight: 700;
+}
+.add_note span img {
+  width: 100%;
+}
+.note_view_content .group select {
+  border: solid 1px #E2E3E4;
+  border-radius: 11px;
+  font-size: 13px;
+  text-indent: 8px;
+}
+div#description:focus-visible {
+  outline: inherit;
+}
+ul.group_list li {
+  font-size: 12px;
+  position: relative;
+  right: 16px;
+  top: 6px;
 
+}
 
 @keyframes App-logo-spin {
   from {

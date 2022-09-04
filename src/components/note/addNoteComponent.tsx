@@ -189,7 +189,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
           </div>
 
           <div className="save">
-            <button type="button" onClick={()=>{saveNote(agent_id)}}>ADD NOTE</button>
+            <button type="button" onClick={()=>{saveNote(agent_id)}}>Save</button>
           </div>
 
         </div>
@@ -197,7 +197,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 <div className="view_content_area">
 
   <input className="note_title" contentEditable="true"  
-  onChange={(e)=>{ setTitle(e.target.value) } }  value={title}
+  onChange={(e)=>{ setTitle(e.target.value) } }  value={title} placeholder="Title....."
   />
 
 
@@ -234,6 +234,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
         <ContentEditable  onKeyUp={(e:any)=>{onKeyUpEV(e)}} className="note_description" id="description" 
         html={noteDescription.toString()} // innerHTML of the editable div
         disabled={false} // use true to disable edition
+        placeholder="Detail"
         onChange={ (e)=>{ editorOnChange(e,
           ()=>{
             console.log(e)

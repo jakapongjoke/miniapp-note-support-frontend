@@ -19,6 +19,14 @@ export async function getData(url: string) {
       return resp.data;
     });
   }
+export async function getNote(group_id:String,agent_id:number){
+  
+    return await axios.get(`/api/note-item/${agent_id}`).then((resp:any) => {
+      return resp.data;
+    });
+}
+
+
 
   export async function groupData(url: string) {
     axios.defaults.baseURL = process.env.REACT_APP_API_URL;

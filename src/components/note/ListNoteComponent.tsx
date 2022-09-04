@@ -1,9 +1,13 @@
-import  React from "react"
+import  React,{useState,useEffect} from "react"
 import {useDispatch} from 'react-redux'
 import { editNote,addNote } from "redux/actions/noteAction";
 import { faPlus,faTimes } from '@fortawesome/free-solid-svg-icons'  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { stripHtml } from "string-strip-html";
+import plus from 'images/plus_icon.png'
+import axios from "axios";
+import { deleteModalI,defaultDeleteModal } from "interfaces/ModalInterface";
+import { makeId,getNote,getData } from "helper";
 
 // import Warroom from '~/sdk'
 
@@ -58,20 +62,111 @@ import { stripHtml } from "string-strip-html";
 //   )
 // }
 
-const List: React.FC<ListNoteProps> = ({ thread_data }) => {
+const ListNoteComponent: React.FC<ListNoteProps> = ({ thread_data }) => {
+
+  const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
+
+  const [deleteStatus,setDeleteStatus] = useState<String>("")
+  const [noteData,setNoteData] = useState<any[]>(thread_data)
+
+
+
+  const [v,setV] =useState<String>("");
+
   const dispatch = useDispatch()
   const agent_id = Number(localStorage.getItem("agent_id"))
   
-  const removeNote = (e:any)=>{
+ useEffect(()=>{
+
+  (async () => {
+    setNoteData(thread_data)
+
+    if(v=="delete"){
+    const thread_data = await getData(`/api/note-item/all/${agent_id}`);
+    setV("")
+
+
+    }
+})()
+
+},[v]);
+
+
+  const removeNote = async (noteId:String,agentId:Number)=>{
+    const deleteNote = await axios.delete(`/api/note-item/${noteId}`,{data:{
+      agent_id:agentId
+
+  }
+     
+  });
+  if(deleteNote.data.status == "delete_complete"){
+    const id = await makeId(7);
+    setDeleteModal(defaultDeleteModal)
+    }
     
   }
-  const renderList = (): JSX.Element[] => {
+  const onDelete = (nodeId:Number,showModal:Boolean)=>{
+    setDeleteModal({
+        nid:nodeId,
+        show:showModal
+    });
+  
+
+}
+
+
+const deleteGroup = async (groupId:String,agentId:Number)=>{
+
+  const deleteData = await axios.delete('/api/note-group/'+groupId,{data:{
+      agent_id:agentId
+
+  }
+     
+  })
+  if(deleteData.data.status == "delete_complete"){
+      console.log('deleteset')
+    const id = await makeId(7);
+      setDeleteModal(defaultDeleteModal)
+      setV("delete")
+  }
+}   
+const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
+  return (
+      <div className="modal_delete">
+      <div className="modal_content">
+          <h2>คุณต้องการลบ {threadName} หรือไม่</h2>
+          <span>
+          คุณต้องการลบ Note นี้ ใช่หรือไม่
+          </span>
+          <div className="action">
+              <button className="btn cancel" onClick={()=>{
+                  setDeleteModal(defaultDeleteModal)
+              }}>ยกเลิก</button>
+              <button className="btn delete" onClick={()=>{
+
+                removeNote(_id,agent_id)
+    
+
+                  
+
+              }}>ลบ</button>
+          </div>
+      </div>
+
+  </div>
+  )
+}
+
+  const renderList = (thread_data:any[]): JSX.Element[] => {
+    console.log(thread_data)
       return thread_data.map((item,key) => {
         // console.log(item)
           return (
               <div className="note-list" key={key}>
                   <div className="list-header">
-                    <div className="remove_note" onClick={removeNote}>
+                    <div className="remove_note" onClick={()=>{
+            onDelete(key,true)
+                    }}>
                     <FontAwesomeIcon icon={faTimes}/>
                     </div>
                       <h2 onClick={()=>{
@@ -93,7 +188,14 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
                   </div>
                   <div className="note-short-detail">{stripHtml(item.thread_description.substring(0,50)).result}....</div>
               
-       
+                  {(() => {
+                        if(deleteModal.nid==key && deleteModal.show===true){
+                            
+                        return (
+                            modalDeleteGroup(item._id,item.thread_name)
+                        )
+                        }
+})()}
               </div>
           )
       })
@@ -101,11 +203,10 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
 
   return (
       <div className="note_list_page_wrp">
-          {renderList()} 
+          {renderList(thread_data)} 
           <div className="add_note">
             <span onClick={()=>{ dispatch(addNote(agent_id,null)) }}>
-                                    <FontAwesomeIcon icon={faPlus} />
-
+            <img src={plus}/>
             </span>
 
               </div>
@@ -113,4 +214,4 @@ const List: React.FC<ListNoteProps> = ({ thread_data }) => {
   )
 }
 
-export default List;
+export default ListNoteComponent;
