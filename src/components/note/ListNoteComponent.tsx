@@ -8,13 +8,15 @@ import plus from 'images/plus_icon.png'
 import axios from "axios";
 import { deleteModalI,defaultDeleteModal } from "interfaces/ModalInterface";
 import { makeId,getNote,getData } from "helper";
+import {  listNote } from "redux/actions/noteAction";
+
 
 // import Warroom from '~/sdk'
 
  
  const DefaultNoteProps = [{
    _id: "",
-   thread_name: "test props",
+   thread_name: "",
    thread_topic : "",
    thread_description : "",
    thread_group : "",
@@ -62,12 +64,12 @@ import { makeId,getNote,getData } from "helper";
 //   )
 // }
 
-const ListNoteComponent: React.FC<ListNoteProps> = ({ thread_data }) => {
+const ListNoteComponent: React.FC<ListNoteProps> = () => {
 
   const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
 
   const [deleteStatus,setDeleteStatus] = useState<String>("")
-  const [noteData,setNoteData] = useState<any[]>(thread_data)
+  const [noteData,setNoteData] = useState<any[]>(DefaultNoteProps)
 
 
 
@@ -79,14 +81,9 @@ const ListNoteComponent: React.FC<ListNoteProps> = ({ thread_data }) => {
  useEffect(()=>{
 
   (async () => {
+    const thread_data = await getData(`/api/note-item/all/${agent_id}`);
     setNoteData(thread_data)
 
-    if(v=="delete"){
-    const thread_data = await getData(`/api/note-item/all/${agent_id}`);
-    setV("")
-
-
-    }
 })()
 
 },[v]);
@@ -102,6 +99,7 @@ const ListNoteComponent: React.FC<ListNoteProps> = ({ thread_data }) => {
   if(deleteNote.data.status == "delete_complete"){
     const id = await makeId(7);
     setDeleteModal(defaultDeleteModal)
+    setV(id)
     }
     
   }
@@ -123,12 +121,7 @@ const deleteGroup = async (groupId:String,agentId:Number)=>{
   }
      
   })
-  if(deleteData.data.status == "delete_complete"){
-      console.log('deleteset')
-    const id = await makeId(7);
-      setDeleteModal(defaultDeleteModal)
-      setV("delete")
-  }
+  
 }   
 const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
   return (
@@ -203,7 +196,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
 
   return (
       <div className="note_list_page_wrp">
-          {renderList(thread_data)} 
+          {renderList(noteData)} 
           <div className="add_note">
             <span onClick={()=>{ dispatch(addNote(agent_id,null)) }}>
             <img src={plus}/>

@@ -45,10 +45,10 @@ console.log('')
   const [listGroup,setlistGroup] = useState<any[]>(DefaultNoteGroup);
   const [groupId,setGroupId] = useState<String>("");
 
+  const agent_id =  Number(localStorage.getItem('agent_id'))
 
   useEffect(()=>{
     (async () => {
-      const agent_id = localStorage.getItem('agent_id')
       const dataGroup = await groupSelectData('/api/note-group/'+agent_id);
 
     setlistGroup(dataGroup);
@@ -187,7 +187,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 
         <div className="header_area">
 
-          <div className="back"  onClick={()=>{ dispatch(listNote(120,"62c86e1f25f272bd9b9346d8")) }}>
+          <div className="back"  onClick={()=>{ dispatch(listNote(agent_id,"")) }}>
           <FontAwesomeIcon icon={faArrowLeft} />
           </div>
 
