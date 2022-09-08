@@ -34,7 +34,24 @@ export const filterNote =  (agentId:Number,groupId:String)=>{
                 payload:{
                  agent_id:agentId,
                  group_id:groupId,
-                 status:"listing"
+                 status:"filter"
+                }
+           
+           }
+           
+           
+           
+           
+           }
+
+export const deleteNoteItem =  (agentId:Number,groupId:String)=>{
+
+     return {
+                 type: 'NOTE_DELETE',
+                payload:{
+                 agent_id:agentId,
+                 group_id:groupId,
+                 status:"delete_note"
                 }
            
            }
@@ -63,6 +80,9 @@ return {
 }
 
       
+
+
+
 
 export const UpdateImageNoteEditor =  (content:String)=>{
 

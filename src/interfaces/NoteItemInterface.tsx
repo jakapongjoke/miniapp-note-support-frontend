@@ -1,4 +1,22 @@
-export interface NoteItemInterface {
+export interface ListNoteItemInterface {  
+  thread_data: {
+  _id:String,
+  thread_name: String,
+  thread_topic : String,
+  thread_description : String,
+  thread_group:String,
+  agent_id: Number,
+  group_id: Object,
+  group_info: {
+    group_name: String,
+    agent_id: Number,
+    thread_name:String,
+    group_color: String,
+  }
+ }[]
+  }
+  export interface NoteItemInterface {  
+
     _id:String,
     thread_name: String,
     thread_topic : String,
@@ -11,8 +29,9 @@ export interface NoteItemInterface {
       agent_id: Number,
       thread_name:String,
       group_color: String,
-    },
-  }
+    }
+
+    }
 
  export const defaultNoteItem = {
     _id:"",

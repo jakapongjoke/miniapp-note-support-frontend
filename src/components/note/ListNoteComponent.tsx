@@ -8,8 +8,8 @@ import plus from 'images/plus_icon.png'
 import axios from "axios";
 import { deleteModalI,defaultDeleteModal } from "interfaces/ModalInterface";
 import { makeId,getNote,getData } from "helper";
-import {  listNote } from "redux/actions/noteAction";
-
+import {  listNote,deleteNoteItem } from "redux/actions/noteAction";
+import { ListNoteItemInterface } from "interfaces/NoteItemInterface";
 
 // import Warroom from '~/sdk'
 
@@ -30,41 +30,9 @@ import {  listNote } from "redux/actions/noteAction";
   }
 
  }]
- interface ListNoteProps {
-  thread_data: {
-    _id:String,
-    thread_name: String,
-    thread_topic : String,
-    thread_description : String,
-    thread_group:String,
-    agent_id: Number,
-    group_id: Object,
-    group_info: {
-      group_name: String,
-      agent_id: Number,
-      thread_name:String,
-      group_color: String,
-    }
-   }[]
-
-}
 
 
-// const ListNoteComponent = ({}):React.Fc<ListNoteProps> = ({thread_data})=>{
-//   return (
-//     <div>
-//       {thread_data.map(thread=>{
-//         return (
-//           <div>
-//             {thread.thread_name}
-//           </div>
-//         )
-//       })}
-//     </div>
-//   )
-// }
-
-const ListNoteComponent: React.FC<ListNoteProps> = () => {
+const ListNoteComponent: React.FC<ListNoteItemInterface> = ({thread_data}) => {
 
   const [deleteModal,setDeleteModal] = useState<deleteModalI>(defaultDeleteModal)
 
@@ -78,15 +46,6 @@ const ListNoteComponent: React.FC<ListNoteProps> = () => {
   const dispatch = useDispatch()
   const agent_id = Number(localStorage.getItem("agent_id"))
   
- useEffect(()=>{
-
-  (async () => {
-    const thread_data = await getData(`/api/note-item/all/${agent_id}`);
-    setNoteData(thread_data)
-
-})()
-
-},[v]);
 
 
   const removeNote = async (noteId:String,agentId:Number)=>{
@@ -100,9 +59,14 @@ const ListNoteComponent: React.FC<ListNoteProps> = () => {
     const id = await makeId(7);
     setDeleteModal(defaultDeleteModal)
     setV(id)
+    dispatch(deleteNoteItem(agent_id,""))
+
     }
     
   }
+
+
+  
   const onDelete = (nodeId:Number,showModal:Boolean)=>{
     setDeleteModal({
         nid:nodeId,
@@ -113,16 +77,7 @@ const ListNoteComponent: React.FC<ListNoteProps> = () => {
 }
 
 
-const deleteGroup = async (groupId:String,agentId:Number)=>{
 
-  const deleteData = await axios.delete('/api/note-group/'+groupId,{data:{
-      agent_id:agentId
-
-  }
-     
-  })
-  
-}   
 const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
   return (
       <div className="modal_delete">
@@ -138,7 +93,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
               <button className="btn delete" onClick={()=>{
 
                 removeNote(_id,agent_id)
-    
+
 
                   
 
@@ -196,7 +151,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
 
   return (
       <div className="note_list_page_wrp">
-          {renderList(noteData)} 
+          {renderList(thread_data)} 
           <div className="add_note">
             <span onClick={()=>{ dispatch(addNote(agent_id,null)) }}>
             <img src={plus}/>

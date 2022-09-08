@@ -97,12 +97,10 @@ interface ListNoteProps {
       });
   
       const AgentInformation = await warroom.getCurrentAgent();
-      console.log(AgentInformation.agent_id)
-      localStorage.setItem("agent_id",AgentInformation.agent_id)
+       localStorage.setItem("agent_id",AgentInformation.agent_id)
       
     }else{
       const AgentInformation = await getAgentId()
-      console.log(AgentInformation)
 
       localStorage.setItem("agent_id",AgentInformation.agent_id)
       
@@ -114,13 +112,17 @@ interface ListNoteProps {
       const dataNoteItem = await getData('/api/note-item/all/'+agent_id);
 
       setListNoteItem(dataNoteItem)
+
     }else{
  
       const dataNoteItem = await getData('/api/note-item/'+notestate.note.data.group_id+'/'+agent_id);
 
       setListNoteItem(dataNoteItem)
-   
+
     }
+
+
+    
     const dataGroup = await groupData('/api/note-group/'+agent_id);
     setlistGroup(dataGroup);
   
@@ -132,13 +134,7 @@ interface ListNoteProps {
 
 
 
- },[note]);
-
-
-
-
-
-
+ },[note,notestate.note.data.group_id,notestate.noteGroup.data.status]);
 
   switch(notestate.noteGroup.data.status){
     case 'note_group_edit_data': {
@@ -183,20 +179,31 @@ interface ListNoteProps {
 
   switch (note.status) {
     case 'listing':
+
       return (
         <div className="App">
             <div className="_note">
-           
-            {/* <FilterComponent options={listGroup} onChange={onSelectChange} /> */}
-            {/* <ListFilterComponent thread_data={listGroup} /> */}
 
             <SelectList data={listGroup} randString={uuidv4()} currentGroup={note.group_id}/>
 
-            <ListNoteComponent thread_data={listNoteItem} />
+            <ListNoteComponent  thread_data={listNoteItem} />
             </div>
         
         </div>
       );
+
+      case 'filter':
+        return (
+          <div className="App">
+              <div className="_note">
+
+              <SelectList data={listGroup} randString={uuidv4()} currentGroup={note.group_id}/>
+  
+              <ListFilterComponent thread_data={listNoteItem} />
+              </div>
+          
+          </div>
+        );
 
       case 'edit':
         return (
@@ -204,6 +211,20 @@ interface ListNoteProps {
            <EditNote _id={note._id}/>
           </div>
         );
+        case 'delete_note':
+ 
+          return (
+            <div className="App">
+                <div className="_note">
+                <SelectList data={listGroup} randString={uuidv4()} currentGroup={note.group_id}/>
+    
+                <ListNoteComponent thread_data={listNoteItem}  />
+                </div>
+            
+            </div>
+          );
+
+        
 
       case 'update_image_in_editor':
         return (
@@ -249,7 +270,7 @@ interface ListNoteProps {
           
               <SelectList data={listGroup}  currentGroup={note.group_id} randString={uuidv4()} />
               {/* <ListFilterComponent thread_data={listGroup} /> */}
-              <ListNoteComponent thread_data={listNoteItem}  {...list} />
+              <ListNoteComponent thread_data={listNoteItem}    {...list} />
       
               </div>
           

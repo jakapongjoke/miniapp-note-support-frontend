@@ -133,12 +133,12 @@ li.palette.focus {
 }
 ul.group_list {
   font-size: 14px;
-  width: 105px;
+  width: 80%;
   height: 32px;
   border: solid 1px #E2E3E4;
   border-radius: 10px;
   position: relative;
-  margin-left: 32px;
+  margin-left: 28px;
   list-style: none;
   text-align: left;
 }

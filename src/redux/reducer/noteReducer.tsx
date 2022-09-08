@@ -29,6 +29,8 @@ type Action = {type:String,payload:{
 
 const NOTE_EDIT:String = 'NOTE_EDIT'
 const NOTE_LIST:String = 'NOTE_LIST'
+const NOTE_FILTER:String = 'NOTE_FILTER'
+const NOTE_DELETE:String = 'NOTE_DELETE'
 
 const NOTE_UPDATE_IMAGE_EDITOR:String = 'NOTE_UPDATE_IMAGE_EDITOR'
 const NOTE_GROUP_MANAGE:String = 'NOTE_GROUP_MANAGE'
@@ -43,6 +45,14 @@ const NOTE_ADD:String = 'NOTE_ADD'
         }
         
         case NOTE_LIST:{
+          return  {...state,data:action.payload}
+          
+        }
+        case NOTE_DELETE:{
+          return  {...state,data:action.payload}
+          
+        }
+        case NOTE_FILTER:{
           return  {...state,data:action.payload}
           
         }
