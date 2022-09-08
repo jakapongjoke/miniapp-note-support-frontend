@@ -86,7 +86,7 @@ if(showList===true){
           return (
             <ul className="group_list">
                   <span className="setting"  onClick={()=>{setShowList(!showList)}}><FontAwesomeIcon icon={faCaretDown}/></span>
-                  <li className="selected" >{currentGroupName}</li>
+                  <li className="selected" >{currentGroupName||"All Group"}</li>
             </ul>
         )
 
