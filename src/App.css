@@ -46,7 +46,6 @@ li.palette.focus {
   width: 100%;
 }
 .note_view_content .group{
-  float: left;
   display: block;
 
 }
@@ -377,6 +376,8 @@ ul.color li {
 .data_save {
   background: green;
   color: white;
+  padding: 15px;
+  font-size: 13px;
 }
 .remove_note {
   position: absolute;

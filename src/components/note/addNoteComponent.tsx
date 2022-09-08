@@ -203,17 +203,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 
   <div className="group">
         <SelectListGroupComponent options={listGroup} onChange={changeGroup} currentGroup={groupId} />
-        {
-        (()=>{
-          if( status =="complete"){
-            return(
-              <div className="status complete">
-                Add Note Complete 
-              </div>
-            )
-          }
-        }
-      )()}
+
         </div>
         {
         (()=>{
