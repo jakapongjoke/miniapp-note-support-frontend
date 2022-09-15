@@ -2,7 +2,7 @@ import  React, { useRef } from "react"
 import { getData,groupSelectData,uploadFileToS3 } from "helper";
 import { useEffect,useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'  
+import { faArrowLeft,faClose } from '@fortawesome/free-solid-svg-icons'  
 import FilterComponent from '../note/FilterComponent';
 import {  listNote } from "redux/actions/noteAction";
 import NoteEditor from "components/editor/NoteEditor";
@@ -17,6 +17,7 @@ import { editorKeyUp,editorKeyDown,editorOnChange } from "events/editorEvents";
 import ContentEditable from "react-contenteditable";
 import { v4 as uuidv4 } from 'uuid';
 import iconAddImage from 'images/add_image_icon.png'
+import e from "express";
 var moment = require('moment'); // require
 
 const EditNote: React.FC<NoteProps> = (props: NoteProps)=>{
@@ -60,9 +61,11 @@ console.log('')
 
   const [NoteItem,setNoteItem] = useState<NoteItemInterface>(defaultNoteItem)
   const [title,setTitle] = useState<string>("")
+  const [threadImages,setThreadImages] = useState<[]>([])
 
   const [lastUpdate,setLastUpdate] = useState<String>("")
 
+  const [images,setImages] = useState<any[]>([]);
 
 
 
@@ -85,6 +88,7 @@ const saveNote = async (id:String)=>{
  const edit =  await axios.put("/api/note-item/"+props._id,{
     title:title,
     description:noteDescription,
+    thread_images:images,
     group_id:groupId
   })
 if(edit.data.status=="complete"){
@@ -117,11 +121,16 @@ console.log(e.target)
       const title = await dataNote.thread_name
       const description = await dataNote.thread_description
       const group_id = await dataNote.group_id
+      const thread_images = await dataNote.thread_images
    
       setTitle(title)
       setnoteDescription(description)
       setGroupId(group_id)
- 
+      if(thread_images[0]!==""){
+        setImages(thread_images)
+
+      }
+
     })()
   
    },[])
@@ -139,45 +148,63 @@ console.log(e.target)
     return textEnd;
 }
 
+const updateThumbnail = async (files:any)=>{
 
-const updateImgToEditor = async (files:any,currentPosition:number,targetSelector:any)=>{
-    console.log("updateImgToEditor")
-    console.log(currentPosition)
+  if(files.length>0){
     const filename = await uuidv4();
     const uploadFile = await uploadFileToS3(files,filename);
-
-    let currentText:String = ""
-    let textRangeEnd;
-    let newText = ""
-    let img = ""
     if(typeof uploadFile !== undefined){
-        const location =  await uploadFile?.location;
-        currentText = noteDescription
-    
-        let textRange =   currentText.substring(0,currentPosition)
-        
-        const total = currentText.length-currentPosition
-        let i:Number;
-
-   
-        
-        
-        // currentText.substring(total,currentText.length)
-        // // textRangeEnd =   currentText.substring(positionInject,currentText.length)
-
-         img = "\n"+`<div style="width:200px; display:block;"><img style="width:100%" src="${location}"/></div>`+"\n"
-         let toEndNum = currentText.length-currentPosition
-         let textEnd =  getTxtByRange(currentPosition,currentText.length,currentText);
-        newText = textRange+img+textEnd
-        // console.log(newText)
-        // console.log(textEnd)
-
-        // dispatch(UpdateImageNoteEditor(newText))
-        setnoteDescription(newText)
-    }else{
-
-        console.log("undefined")
+      const location =  await uploadFile?.location;
+      console.log(images.length)
+      if(images.length===0){
+        setImages(images=>[location])
+  
+      }else{
+        setImages(images=>[...images,location])
+  
+      }
+  
     }
+  
+  }
+  
+  }
+
+
+  const deleteThumbnail = (idx:Number)=>{
+    let data = images;
+    const item = images.filter(function(item,id){
+      return id!==idx
+    })
+    setImages(item)
+  }
+  
+  const imageList = (images:any[])=> {
+  
+    return images.map((item,key) => {
+      if(item){
+        return (
+          <div className="thumbnail" key={key}>
+           <span className="delete_thumb" onClick={()=>{ deleteThumbnail(key) }}>
+           <FontAwesomeIcon icon={faClose} />
+    
+           </span>
+            <a href={item} target="blank">
+            <img src={item} key={key}/>
+    
+    
+            </a>
+          </div>
+        )    
+      }
+     
+  
+  
+      })
+   
+  
+  
+    
   
   }
 
@@ -242,7 +269,7 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 </label>
 <input type="file" id="getFile" onChange={(e)=>{ 
     
-    updateImgToEditor(e.target.files,mouseClickPosition.current,e.target)
+    updateThumbnail(e.target.files)
 
 }
 
@@ -251,6 +278,25 @@ const updateImgToEditor = async (files:any,currentPosition:number,targetSelector
 </div>
 
       </div>
+
+
+      <div className="images">
+      <h4>Images</h4>
+
+{
+
+  imageList(images)
+
+
+
+
+
+
+}
+</div>
+
+
+
     </>
     )
 

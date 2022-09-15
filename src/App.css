@@ -437,7 +437,45 @@ ul.group_list li {
   top: 6px;
 
 }
+.thumbnail {
+  width: 20%;
+  height: 50px;
+  float: left;
+  background: white;
+  border: solid 1px #afa6a6;
+  overflow: hidden;
+  position: relative;
+}
+.images {
+  width: 100%;
+  float: left;
+}
+.thumbnail img {
+  width: 100%;
+}
+.images{
+  padding-left: 14px;
 
+}
+.images h4 {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+}
+.delete_thumb {
+  position: absolute;
+  right: 0;
+  background: #8d0303;
+  width: 20px;
+  height: 20px;
+  color: white;
+  border-radius: 50px;
+  font-size: 12px;
+  cursor: pointer;
+}
+span.delete_thumb svg {
+  vertical-align: middle;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
