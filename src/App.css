@@ -476,6 +476,22 @@ ul.group_list li {
 span.delete_thumb svg {
   vertical-align: middle;
 }
+.note_thumbnail {
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  border: solid 1px #a9a9a95c;
+  overflow: hidden;
+  position: absolute;
+  top: 25px;
+}
+.note_content {
+  width: 150px;
+  display: inline-block;
+}
+.note_thumbnail img {
+  width: 100%;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

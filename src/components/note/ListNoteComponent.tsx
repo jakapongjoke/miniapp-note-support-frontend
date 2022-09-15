@@ -105,48 +105,112 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
   )
 }
 
-  const renderList = (thread_data:any[]): JSX.Element[] => {
+  const renderList = (thread_data:any[]) => {
     console.log(thread_data)
+    
       return thread_data.map((item,key) => {
-        // console.log(item)
+        console.log(item.thread_images[0])
+        if(typeof item.thread_images[0]!=="undefined"){
           return (
-              <div className="note-list" key={key}>
-                  <div className="list-header">
-                    <div className="remove_note" onClick={()=>{
-            onDelete(key,true)
+            
+            <div className="note-list" key={key}>
+              <div className="note_content">
+
+              <div className="list-header">
+                  <div className="remove_note" onClick={()=>{
+          onDelete(key,true)
+                  }}>
+                  <FontAwesomeIcon icon={faTimes}/>
+                  </div>
+                    <h2 onClick={()=>{
+                      dispatch(editNote(item._id,item.thread_description))
                     }}>
-                    <FontAwesomeIcon icon={faTimes}/>
-                    </div>
-                      <h2 onClick={()=>{
-                        dispatch(editNote(item._id,item.thread_description))
-                      }}>
-                        
-                        {item.thread_name}
+                                      {item.thread_name}
+
+                
 
 
-                      </h2>
-                  </div>
-                  <div className="group">
-                    <span>
-                    {item.group_info.group_name}
+                    </h2>
+                </div>
+                <div className="group">
+                  <span>
+                  {item.group_info.group_name}
 
 
-                    </span>
+                  </span>
 
-                  </div>
-                  <div className="note-short-detail">{stripHtml(item.thread_description.substring(0,50)).result}....</div>
-              
-                  {(() => {
-                        if(deleteModal.nid==key && deleteModal.show===true){
-                            
-                        return (
-                            modalDeleteGroup(item._id,item.thread_name)
-                        )
-                        }
+                </div>
+                <div className="note-short-detail">{stripHtml(item.thread_description.substring(0,50)).result}....</div>
+            
+                {(() => {
+                      if(deleteModal.nid==key && deleteModal.show===true){
+                          
+                      return (
+                          modalDeleteGroup(item._id,item.thread_name)
+                      )
+                      }
 })()}
+
               </div>
+              <div className="note_thumbnail">
+                <img src={item.thread_images[0]}></img>
+              </div>
+        
+            </div>
+
+
+
+
+        )
+
+        }else{
+
+          return (
+          <div className="note-list" key={key}>
+          <div className="list-header">
+            <div className="remove_note" onClick={()=>{
+    onDelete(key,true)
+            }}>
+            <FontAwesomeIcon icon={faTimes}/>
+            </div>
+              <h2 onClick={()=>{
+                dispatch(editNote(item._id,item.thread_description))
+              }}>
+                
+                {item.thread_name}
+
+
+              </h2>
+          </div>
+          <div className="group">
+            <span>
+            {item.group_info.group_name}
+
+
+            </span>
+
+          </div>
+          <div className="note-short-detail">{stripHtml(item.thread_description.substring(0,50)).result}....</div>
+      
+          {(() => {
+                if(deleteModal.nid==key && deleteModal.show===true){
+                    
+                return (
+                    modalDeleteGroup(item._id,item.thread_name)
+                )
+                }
+})()}
+      </div>
+
           )
+
+          
+        }
+  
       })
+
+
+
   }
 
   return (
