@@ -125,7 +125,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
                     <h2 onClick={()=>{
                       dispatch(editNote(item._id,item.thread_description))
                     }}>
-                                      {item.thread_name}
+                                      {stripHtml(item.thread_name.substring(0,30)).result}
 
                 
 
@@ -134,7 +134,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
                 </div>
                 <div className="group">
                   <span>
-                  {stripHtml(item.thread_description.substring(0,30)).result}
+                 {stripHtml(item.thread_description.substring(0,50)).result}
 
 
                   </span>
@@ -177,7 +177,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
                 dispatch(editNote(item._id,item.thread_description))
               }}>
                 
-                {stripHtml(item.thread_description.substring(0,30)).result}
+                {stripHtml(item.thread_name.substring(0,30)).result}
 
 
               </h2>
