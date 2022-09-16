@@ -27,12 +27,6 @@ var moment = require('moment'); // require
 
 const AddNote: React.FC<AddNoteProps> = (props: AddNoteProps)=>{
 
-const blurContent = (e:any) =>{
-}
-
-const mouseUpContent = (e:any) =>{
-}
-
 const onKeyUpEV = (e:any) =>{
     if (e.key === "Enter") { // key code of the keybord key
 console.log(e)
@@ -94,12 +88,10 @@ const saveNote = async (agent_id:Number)=>{
     group_id:groupId,
     agent_id:agent_id
   })
-console.log(add)
 if(add.data.status=="save_complete"){
   setStatus("complete")
   
 }
-
  }
  
 
