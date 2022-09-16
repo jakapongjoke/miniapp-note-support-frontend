@@ -134,7 +134,7 @@ const modalDeleteGroup = (_id:String,threadName:String): JSX.Element=>{
                 </div>
                 <div className="group">
                   <span>
-                 {stripHtml(item.thread_description.substring(0,50)).result}
+                  {item.group_info.group_name}
 
 
                   </span>
