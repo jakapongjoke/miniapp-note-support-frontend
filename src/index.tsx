@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Export from './Export'
 import DriveAuth from './DriveAuth'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
@@ -31,6 +32,7 @@ root.render(
     <Router>
       <Routes>
         <Route path='/' element={<App />} />
+        <Route path='/export' element={<Export />} />
         <Route path='/auth' element={<DriveAuth />} />
       </Routes>
     </Router>

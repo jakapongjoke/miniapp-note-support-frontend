@@ -29,9 +29,9 @@ function Auth() {
       await localStorage.setItem('token', JSON.stringify(data))
     } catch {
       localStorage.removeItem('token')
-      navigate('/')
+      navigate('/export')
     } finally {
-      navigate('/')
+      navigate('/export')
     }
   }
 
