@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import DriveAuth from './DriveAuth'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
@@ -9,15 +10,17 @@ import { applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from "./redux/reducer/rootReducer";
+import { BrowserRouter as Router, Routes, Route }
+  from 'react-router-dom';
 
-import {legacy_createStore  as createStore} from 'redux';
+import { legacy_createStore as createStore } from 'redux';
 const middlewares = [thunk]
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 // const Store = createStore(rootReducer)
 
-const store = createStore(rootReducer,composeWithDevTools(applyMiddleware(...middlewares)))
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middlewares)))
 
 
 const root = ReactDOM.createRoot(
@@ -25,8 +28,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
-      <App />
-
+    <Router>
+      <Routes>
+        <Route path='/' element={<App />} />
+        <Route path='/auth' element={<DriveAuth />} />
+      </Routes>
+    </Router>
   </Provider>
 );
 
