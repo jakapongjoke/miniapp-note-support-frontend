@@ -8,6 +8,7 @@ import { RootStore, Store } from './redux/store'
 import ImportIMG from 'images/import.png'
 import ExportIMG from 'images/export.png'
 import GoogleDriveIMG from 'images/google_drive.png'
+import { generateId } from 'helper'
 
 interface ListNoteProps {
     thread_data: {
@@ -25,6 +26,13 @@ interface ListNoteProps {
             group_color: String,
         },
     }[]
+}
+
+interface noteProps {
+    title: string,
+    noteDescription: string,
+    images: string,
+    groupId: string,
 }
 
 function Export() {
@@ -190,11 +198,46 @@ function Export() {
         }
     }
 
+    const onSaveToDatabase = async (data: noteProps[]) => {
+        setLoading(true)
+        try {
+            const groupList = await groupData('/api/note-group/' + agent_id);
+            const obj = data.map(el => {
+                return {
+                    _id: generateId().$oid,
+                    thread_name: el.title,
+                    thread_description: el.noteDescription,
+                    thread_images: el.images,
+                    group_id: el.groupId,
+                    agent_id: agent_id
+                }
+            })
+            const groupIds = groupList.map(el => el._id)
+            const objFilter = obj.filter(el => groupIds.includes(el.group_id))
+            const add = await axios.post("/api/note-item-import/", objFilter)
+            if (add.data.status == "save_complete") {
+                alert('Import Success')
+            } else {
+                alert('Import Unsuccess')
+            }
+        } catch (err) {
+            console.log('onSaveToDatabase', err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const onChooseImportFile = async (e: any) => {
         e.stopPropagation()
         e.preventDefault()
-        const file = e.target.files[0]
-        console.log('file', file)
+        const file = JSON.parse(await e.target.files[0].text())
+        e.target.value = null
+        e.target.files = null
+        if (file.length > 0) {
+            await onSaveToDatabase(file)
+        } else {
+            alert('No data !')
+        }
     }
 
     const onImport = () => {
@@ -202,6 +245,7 @@ function Export() {
     }
 
     const onExport = async () => {
+        setLoading(true)
         try {
             const blob = new Blob([JSON.stringify(listNoteItem)], { type: 'application/json' })
             const url = window.URL.createObjectURL(blob)
@@ -214,8 +258,11 @@ function Export() {
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)
+            alert('Export Success')
         } catch (err) {
             console.log(err)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -323,6 +370,7 @@ function Export() {
                         display: 'none'
                     }}
                     onChange={onChooseImportFile}
+                    accept={'application/JSON'}
                 />
             </div>
             <div
