@@ -108,6 +108,7 @@ function Export() {
                 name: string
             }[] = data.files
             const file = files.filter((el) => el.name === `${agent_id}.json`)
+            console.log('file', file)
             if (file) {
                 console.log(file[0].id)
                 setFileId(file[0].id)
@@ -135,7 +136,7 @@ function Export() {
             }
             const { data } = await axios(config)
             // await updateFileName(file.name, data.id)
-            alert('success')
+            alert('export success')
         } catch (err) {
             setIsHaveDriveToken(false)
             onLoginGmail()
@@ -160,7 +161,7 @@ function Export() {
             }
             const { data } = await axios(config)
             console.log(data.webContentLink)
-            alert('success')
+            alert('export success')
         } catch (err) {
             console.log('updateFileName Err:', err)
         }
@@ -193,12 +194,24 @@ function Export() {
         if (!isHaveDriveToken) {
             onLoginGmail()
         } else {
-
+            try {
+                const config = {
+                    method: 'get',
+                    url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+                    headers: {
+                        'Authorization': `${token.token_type} ${token.access_token}`
+                    },
+                }
+                const { data } = await axios(config)
+                localStorage.setItem(`data_from_drive_${agent_id}`, JSON.stringify(data))
+                alert('import success')
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
     const onExport = async () => {
-        console.log('export')
         if (!isHaveDriveToken) {
             onLoginGmail()
         } else {
