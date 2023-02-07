@@ -49,6 +49,8 @@ function Export() {
     const [loading, setLoading] = useState(false)
     const [listNoteItem, setListNoteItem] = useState<ListNoteProps["thread_data"]>([])
 
+    const inputImportRef = useRef<HTMLInputElement>(null)
+
     useEffect(() => {
         (async () => {
             if (process.env.REACT_APP_ENV == "prod") {
@@ -136,7 +138,6 @@ function Export() {
             }
             const { data } = await axios(config)
             // await updateFileName(file.name, data.id)
-            alert('export success')
         } catch (err) {
             setIsHaveDriveToken(false)
             onLoginGmail()
@@ -161,7 +162,6 @@ function Export() {
             }
             const { data } = await axios(config)
             console.log(data.webContentLink)
-            alert('export success')
         } catch (err) {
             console.log('updateFileName Err:', err)
         }
@@ -190,28 +190,52 @@ function Export() {
         }
     }
 
-    const onImport = async () => {
-        if (!isHaveDriveToken) {
-            onLoginGmail()
-        } else {
-            try {
-                const config = {
-                    method: 'get',
-                    url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
-                    headers: {
-                        'Authorization': `${token.token_type} ${token.access_token}`
-                    },
-                }
-                const { data } = await axios(config)
-                localStorage.setItem(`data_from_drive_${agent_id}`, JSON.stringify(data))
-                alert('import success')
-            } catch (err) {
-                console.log(err)
-            }
-        }
+    const onChooseImportFile = async (e: any) => {
+        e.stopPropagation()
+        e.preventDefault()
+        const file = e.target.files[0]
+        console.log('file', file)
+    }
+
+    const onImport = () => {
+        inputImportRef?.current?.click()
     }
 
     const onExport = async () => {
+        try {
+            const blob = new Blob([JSON.stringify(listNoteItem)], { type: 'application/json' })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute(
+                'download',
+                `${agent_id}.json`,
+            )
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const downloadDataFromDrive = async () => {
+        try {
+            const config = {
+                method: 'get',
+                url: `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+                headers: {
+                    'Authorization': `${token.token_type} ${token.access_token}`
+                },
+            }
+            const { data } = await axios(config)
+            localStorage.setItem(`data_from_drive_${agent_id}`, JSON.stringify(data))
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const addDataToDrive = async () => {
         if (!isHaveDriveToken) {
             onLoginGmail()
         } else {
@@ -223,6 +247,12 @@ function Export() {
                 await onUploadFile(file)
             }
         }
+    }
+
+    const onSyncDrive = async () => {
+        await addDataToDrive()
+        await downloadDataFromDrive()
+        alert('Sync Success')
     }
 
     const renderBtn = (onPress: any, icon: any, title: string, isMarginLeft: boolean) => {
@@ -239,7 +269,8 @@ function Export() {
                     alignItems: 'center',
                     justifyContent: 'space-around',
                     marginLeft: isMarginLeft ? 20 : 0,
-                    pointerEvents: loading ? 'none' : 'auto'
+                    pointerEvents: loading ? 'none' : 'auto',
+                    cursor: 'pointer'
                 }}
                 onClick={onPress}
             >
@@ -285,6 +316,14 @@ function Export() {
                     {renderBtn(onImport, ImportIMG, 'Import', false)}
                     {renderBtn(onExport, ExportIMG, 'Export', true)}
                 </div>
+                <input
+                    type={'file'}
+                    ref={inputImportRef}
+                    style={{
+                        display: 'none'
+                    }}
+                    onChange={onChooseImportFile}
+                />
             </div>
             <div
                 style={{
@@ -299,7 +338,7 @@ function Export() {
                         marginTop: 20
                     }}
                 >
-                    {renderBtn(null, GoogleDriveIMG, 'Google Drive', false)}
+                    {renderBtn(onSyncDrive, GoogleDriveIMG, 'Google Drive', false)}
                 </div>
             </div>
         </div>
