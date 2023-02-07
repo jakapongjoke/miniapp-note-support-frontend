@@ -79,7 +79,6 @@ function Export() {
             const token = await localStorage.getItem('token')
             if (!token) {
                 setIsHaveDriveToken(false)
-                onLoginGmail()
             } else {
                 setIsHaveDriveToken(true)
                 setToken(JSON.parse(token))
@@ -87,7 +86,6 @@ function Export() {
             }
         } catch {
             setIsHaveDriveToken(false)
-            onLoginGmail()
         }
     }
 
