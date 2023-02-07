@@ -5,6 +5,9 @@ import Warroom from "sdk"
 import { groupData, getData, getAgentId } from './helper'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootStore, Store } from './redux/store'
+import ImportIMG from 'images/import.png'
+import ExportIMG from 'images/export.png'
+import GoogleDriveIMG from 'images/google_drive.png'
 
 interface ListNoteProps {
     thread_data: {
@@ -31,6 +34,8 @@ function Export() {
     const noteStatus = useRef<String>("listing")
 
     const agent_id = Number(localStorage.getItem("agent_id"))
+
+    const login_gmail = `https://accounts.google.com/o/oauth2/v2/auth?scope=${globalState.SCOPE}&response_type=${globalState.RESPONSE_TYPE}&access_type=${globalState.ACCESS_TYPE}&redirect_uri=${globalState.REDIRECT_URI}&client_id=${globalState.CLIENT_ID}`
 
     const [token, setToken] = useState({
         access_token: '',
@@ -74,6 +79,7 @@ function Export() {
             const token = await localStorage.getItem('token')
             if (!token) {
                 setIsHaveDriveToken(false)
+                onLoginGmail()
             } else {
                 setIsHaveDriveToken(true)
                 setToken(JSON.parse(token))
@@ -81,6 +87,7 @@ function Export() {
             }
         } catch {
             setIsHaveDriveToken(false)
+            onLoginGmail()
         }
     }
 
@@ -112,6 +119,10 @@ function Export() {
         }
     }
 
+    const onLoginGmail = () => {
+        location.href = login_gmail
+    }
+
     const onUpdateFile = async (file: any) => {
         setLoading(true)
         try {
@@ -126,8 +137,10 @@ function Export() {
             }
             const { data } = await axios(config)
             // await updateFileName(file.name, data.id)
+            alert('success')
         } catch (err) {
             setIsHaveDriveToken(false)
+            onLoginGmail()
         } finally {
             setLoading(false)
         }
@@ -149,6 +162,7 @@ function Export() {
             }
             const { data } = await axios(config)
             console.log(data.webContentLink)
+            alert('success')
         } catch (err) {
             console.log('updateFileName Err:', err)
         }
@@ -171,41 +185,123 @@ function Export() {
             await updateFileName(file.name, data.id)
         } catch (err) {
             setIsHaveDriveToken(false)
+            onLoginGmail()
         } finally {
             setLoading(false)
         }
     }
 
-    const onExport = async () => {
-        const blob = new Blob([JSON.stringify(listNoteItem)], { type: 'application/json' })
-        const file = new File([blob], `${agent_id}.json`, { type: 'application/json' })
-        if (fileId) {
-            await onUpdateFile(file)
+    const onImport = async () => {
+        if (!isHaveDriveToken) {
+            onLoginGmail()
         } else {
-            await onUploadFile(file)
+
         }
     }
 
-    return (
-        <div className="App">
-            {
-                !isHaveDriveToken ? (
-                    <a
-                        className="App-link"
-                        href={`https://accounts.google.com/o/oauth2/v2/auth?scope=${globalState.SCOPE}&response_type=${globalState.RESPONSE_TYPE}&access_type=${globalState.ACCESS_TYPE}&redirect_uri=${globalState.REDIRECT_URI}&client_id=${globalState.CLIENT_ID}`}
-                        // target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Login with Gmail
-                    </a>
-                ) : (
-                    <div>
-                        <button onClick={onExport} disabled={loading}>Export</button>
-                    </div>
-                )
+    const onExport = async () => {
+        console.log('export')
+        if (!isHaveDriveToken) {
+            onLoginGmail()
+        } else {
+            const blob = new Blob([JSON.stringify(listNoteItem)], { type: 'application/json' })
+            const file = new File([blob], `${agent_id}.json`, { type: 'application/json' })
+            if (fileId) {
+                await onUpdateFile(file)
+            } else {
+                await onUploadFile(file)
             }
+        }
+    }
+
+    const renderBtn = (onPress: any, icon: any, title: string, isMarginLeft: boolean) => {
+        return (
+            <div
+                style={{
+                    height: 180,
+                    width: 150,
+                    border: '2px solid #D4D4D4',
+                    borderRadius: 5,
+                    padding: 20,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    marginLeft: isMarginLeft ? 20 : 0,
+                    pointerEvents: loading ? 'none' : 'auto'
+                }}
+                onClick={onPress}
+            >
+                <img
+                    src={icon}
+                    height={60}
+                    width={60}
+                    style={{
+                        objectFit: 'contain',
+                    }}
+                />
+                <span
+                    style={{
+                        textAlign: 'center',
+                    }}
+                >
+                    {title}
+                </span>
+            </div>
+        )
+    }
+
+    return (
+        <div
+            style={{
+                padding: '1rem'
+            }}
+        >
+            <div
+                style={{
+                    paddingBottom: 20,
+                    borderBottom: '2px solid #D4D4D4'
+                }}
+            >
+                <span>Local Backup</span>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 20
+                    }}
+                >
+                    {renderBtn(onImport, ImportIMG, 'Import', false)}
+                    {renderBtn(onExport, ExportIMG, 'Export', true)}
+                </div>
+            </div>
+            <div
+                style={{
+                    marginTop: 20,
+                }}
+            >
+                <span>Cloud Backup</span>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 20
+                    }}
+                >
+                    {renderBtn(null, GoogleDriveIMG, 'Google Drive', false)}
+                </div>
+            </div>
         </div>
     );
 }
+
+// const styles = {
+//     localBackupBtn: {
+//         border
+//     },
+//     cloudBackupBtn: {
+
+//     }
+// }
 
 export default Export;
